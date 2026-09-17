@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2EFE9;
+    --bg-elevated:#FBFAF7;
+    --ink:#232220;
+    --ink-soft:#6B6459;
+    --line:#DBD5C9;
+    --accent:#2F5FE0;
+    --accent-soft:#DEE6FB;
+    --sage:#7C8A72;
+    --danger:#C1274F;
+    --star-on:#E8A23D;
+    --star-off:#D9D2C3;
+    --virt-on:#2F5FE0;
+    --c-haut:#2F5FE0;
+    --c-haut-soft:#DEE6FB;
+    --c-bas:#E0982E;
+    --c-bas-soft:#F7E7CE;
+    --c-chaussures:#C1274F;
+    --c-chaussures-soft:#F6DCE3;
+    --radius-s:5px;
+    --radius-m:14px;
+    --shadow: 0 1px 2px rgba(35,34,32,0.06), 0 6px 18px rgba(35,34,32,0.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#171614; --bg-elevated:#221F1B; --ink:#F1ECE1; --ink-soft:#ABA091; --line:#39352E;
+      --accent:#6C94F5; --accent-soft:#233052; --sage:#9BAE8F; --danger:#E06485;
+      --star-on:#F0B44E; --virt-on:#6C94F5; --star-off:#4A4539;
+      --c-haut:#6C94F5; --c-haut-soft:#233052;
+      --c-bas:#F0B44E; --c-bas-soft:#3A2E17;
+      --c-chaussures:#E06485; --c-chaussures-soft:#3A1E27;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 6px 18px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171614; --bg-elevated:#221F1B; --ink:#F1ECE1; --ink-soft:#ABA091; --line:#39352E;
+    --accent:#6C94F5; --accent-soft:#233052; --sage:#9BAE8F; --danger:#E06485;
+    --star-on:#F0B44E; --virt-on:#6C94F5; --star-off:#4A4539;
+    --c-haut:#6C94F5; --c-haut-soft:#233052;
+    --c-bas:#F0B44E; --c-bas-soft:#3A2E17;
+    --c-chaussures:#E06485; --c-chaussures-soft:#3A1E27;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 6px 18px rgba(0,0,0,0.3);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink); font-family:'Work Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased; min-height:100vh; padding-bottom:calc(76px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3{font-family:'Fraunces', Georgia, serif; font-weight:500; margin:0;}
+  ::selection{background:var(--accent-soft);}
+
+  header.top{
+    padding:calc(18px + env(safe-area-inset-top)) 20px 14px; display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1px solid var(--line); background:var(--bg); position:sticky; top:0; z-index:5;
+  }
+  header.top .mark{font-family:'Fraunces',serif; font-size:22px; font-style:italic;}
+  header.top .sub{font-size:12px; color:var(--ink-soft);}
+
+  main{padding:18px 16px 8px; max-width:640px; margin:0 auto;}
+  .view{display:none;}
+  .view.active{display:block; animation:fadein .18s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  .filters{display:flex; gap:8px; overflow-x:auto; padding-bottom:14px; -ms-overflow-style:none; scrollbar-width:none;}
+  .filters::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto; padding:7px 15px; border-radius:999px; border:1px solid var(--line);
+    font-size:13px; font-weight:500; color:var(--ink-soft); background:var(--bg-elevated); cursor:pointer; white-space:nowrap;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .chip.active{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+  .chip.cat-haut.active{background:var(--c-haut); border-color:var(--c-haut); color:#fff;}
+  .chip.cat-bas.active{background:var(--c-bas); border-color:var(--c-bas); color:#2A1D06;}
+  .chip.cat-chaussures.active{background:var(--c-chaussures); border-color:var(--c-chaussures); color:#fff;}
+
+  /* Wardrobe grid — 3 par ligne */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
+  .card{
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:8px; overflow:hidden; box-shadow:var(--shadow); cursor:pointer;
+  }
+  .card .thumb{width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--accent-soft); display:block;}
+  .card .meta{padding:6px 7px 8px;}
+  .card .meta .name{font-size:11.5px; font-weight:500; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .card .meta .cat{font-size:10px; color:var(--ink-soft); margin-top:1px;}
+
+  .empty{text-align:center; padding:50px 20px; color:var(--ink-soft);}
+  .empty h3{color:var(--ink); font-size:19px; margin-bottom:8px;}
+  .empty p{font-size:13.5px; line-height:1.5; max-width:280px; margin:0 auto;}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:12px 18px; border-radius:var(--radius-s);
+    border:1px solid var(--ink); background:var(--ink); color:var(--bg); font-family:'Work Sans',sans-serif; font-size:14.5px; font-weight:500;
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+  }
+  .btn.secondary{background:transparent; color:var(--ink); border-color:var(--line);}
+  .btn.danger{background:transparent; color:var(--danger); border-color:var(--danger);}
+  .btn.block{width:100%;}
+  .btn:active{opacity:0.75;}
+
+  label.field{display:block; margin-bottom:16px;}
+  label.field .lbl{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:6px;}
+  input[type=text], textarea, select{
+    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:var(--radius-s);
+    background:var(--bg-elevated); color:var(--ink); font-family:'Work Sans',sans-serif; font-size:14.5px;
+  }
+  textarea{min-height:70px; resize:vertical;}
+  .cat-picker{display:flex; gap:8px; flex-wrap:wrap;}
+  .cat-picker .opt{padding:8px 13px; border-radius:999px; border:1px solid var(--line); font-size:13px; cursor:pointer; background:var(--bg-elevated);}
+  .cat-picker .opt.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+
+  .photo-row{display:flex; gap:10px; margin-bottom:16px;}
+  .photo-row .btn{flex:1;}
+  .preview-photo{
+    width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:var(--radius-m); border:1px solid var(--line);
+    margin-bottom:16px; background:var(--accent-soft); display:none;
+  }
+
+  /* Composer — cartes swipables */
+  .swipe-row{margin-bottom:16px;}
+  .swipe-label{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; padding:0 2px;}
+  .swipe-label .lname{font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;}
+  .swipe-label .lcount{font-size:11.5px; color:var(--ink-soft);}
+  .swipe-viewport{position:relative; height:190px; touch-action:pan-y;}
+  .swipe-card{
+    position:absolute; inset:0; border-radius:16px; overflow:hidden; background:var(--bg-elevated);
+    box-shadow:var(--shadow); border:2px solid var(--line); cursor:grab; will-change:transform;
+    display:flex; align-items:flex-end;
+  }
+  .swipe-card img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .swipe-card .grad{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.62), rgba(0,0,0,0) 55%);}
+  .swipe-card .cap{position:relative; padding:12px 14px; color:#fff; z-index:1;}
+  .swipe-card .cap .cn{font-family:'Fraunces',serif; font-size:16.5px; line-height:1.2;}
+  .swipe-card .cap .cc{font-size:11px; opacity:0.85; margin-top:1px;}
+  .swipe-card.dragging{transition:none;}
+  .swipe-empty{
+    height:190px; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
+    border:1.5px dashed var(--line); border-radius:16px; color:var(--ink-soft); font-size:13px;
+  }
+  .swipe-dots{display:flex; justify-content:center; gap:5px; margin-top:9px;}
+  .swipe-dots .dot{width:6px; height:6px; border-radius:50%; background:var(--line);}
+  .swipe-dots .dot.active{background:var(--dot-color, var(--ink)); width:16px; border-radius:4px; transition:width .15s;}
+  .swipe-hint{text-align:center; font-size:11.5px; color:var(--ink-soft); margin:-4px 0 18px;}
+
+  .rating-block{background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m); padding:16px; margin-top:6px;}
+  .rating-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .rating-row:last-child{margin-bottom:0;}
+  .rating-row .rlabel{font-size:13.5px;}
+  .rating-row .rlabel .sub{display:block; font-size:11px; color:var(--ink-soft); font-weight:400;}
+  .stars{display:flex; gap:4px;}
+  .star{font-size:25px; color:var(--star-off); cursor:pointer; line-height:1;}
+  .star.on{color:var(--star-on);}
+  .star.virtual.on{color:var(--virt-on);}
+
+  /* Looks list */
+  .look-card{
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m);
+    padding:12px; margin-bottom:12px; box-shadow:var(--shadow); cursor:pointer; display:flex; gap:12px; align-items:center;
+  }
+  .look-card .imgs{display:flex; gap:5px; flex:0 0 auto;}
+  .look-card .imgs img{width:48px; height:48px; object-fit:cover; border-radius:6px; border:1px solid var(--line);}
+  .look-card .info{flex:1; min-width:0;}
+  .look-card .lscores{font-size:12px; display:flex; gap:12px; margin-top:4px;}
+  .look-card .lscores span{color:var(--ink-soft);}
+  .look-card .lscores b{color:var(--ink); font-weight:600;}
+
+  .hidden-note{font-size:12.5px; color:var(--ink-soft); text-align:center; padding:14px; }
+  .hidden-note button{background:none; border:none; color:var(--accent); text-decoration:underline; font-size:12.5px; padding:0;}
+
+  /* Item detail best looks */
+  .best-look-row{display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); cursor:pointer;}
+  .best-look-row .imgs{display:flex; gap:5px;}
+  .best-look-row .imgs img{width:42px; height:42px; object-fit:cover; border-radius:6px; border:1px solid var(--line);}
+  .best-look-row .sc{font-size:12px; color:var(--ink-soft); margin-left:auto; text-align:right;}
+
+  .overlay{position:fixed; inset:0; background:var(--bg); z-index:20; display:none; overflow-y:auto;}
+  .overlay.show{display:block;}
+  .overlay-top{
+    padding:calc(14px + env(safe-area-inset-top)) 16px 12px; display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg); z-index:2;
+  }
+  .overlay-top .close{font-size:15px; color:var(--ink-soft); cursor:pointer;}
+  .overlay-body{padding:18px 16px 40px; max-width:640px; margin:0 auto;}
+  .overlay-body img.big{width:100%; max-height:46vh; object-fit:contain; border-radius:var(--radius-m); background:var(--accent-soft); margin-bottom:14px;}
+  .overlay-body .trio{display:flex; gap:8px; margin-bottom:16px;}
+  .overlay-body .trio img{width:31%; aspect-ratio:1/1; object-fit:cover; border-radius:var(--radius-s); border:1px solid var(--line);}
+
+  nav.tabbar{
+    position:fixed; bottom:0; left:0; right:0; z-index:15; background:var(--bg-elevated); border-top:1px solid var(--line);
+    padding:8px 6px calc(8px + env(safe-area-inset-bottom)); display:flex; justify-content:space-around;
+  }
+  nav.tabbar button{
+    background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:var(--ink-soft); font-family:'Work Sans',sans-serif; font-size:10.5px; cursor:pointer; padding:4px 8px;
+  }
+  nav.tabbar button .icon{font-size:20px;}
+  nav.tabbar button.active{color:var(--ink);}
+
+  .toast{
+    position:fixed; bottom:calc(90px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%);
+    background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px;
+    opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:40;
+  }
+  .toast.show{opacity:1;}
+
+  .settings-row{display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line);}
+  .settings-row .s-label{font-size:14px;}
+  .settings-row .s-sub{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div><div class="mark">Atelier</div><div class="sub" id="headerSub">ta garde-robe</div></div>
+</header>
+
+<main>
+
+  <!-- GARDE-ROBE -->
+  <section class="view active" id="view-wardrobe">
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="wardrobeGrid"></div>
+    <div class="empty" id="wardrobeEmpty" style="display:none;">
+      <h3>Rien ici pour l'instant</h3>
+      <p>Ajoute ton premier vêtement depuis l'onglet « Ajouter ».</p>
+    </div>
+  </section>
+
+  <!-- AJOUTER -->
+  <section class="view" id="view-add">
+    <h2 style="margin-bottom:18px;">Ajouter un vêtement</h2>
+    <img id="addPreview" class="preview-photo" alt="">
+    <div class="photo-row">
+      <button class="btn secondary" id="btnCamera">📷 Prendre une photo</button>
+      <button class="btn secondary" id="btnGallery">🖼️ Depuis la galerie</button>
+    </div>
+    <input type="file" accept="image/*" capture="environment" id="fileCamera" style="display:none;">
+    <input type="file" accept="image/*" id="fileGallery" style="display:none;">
+    <label class="field"><span class="lbl">Catégorie</span><div class="cat-picker" id="addCatPicker"></div></label>
+    <label class="field"><span class="lbl">Nom (optionnel)</span><input type="text" id="addName" placeholder="Ex. Pull col rond bleu marine"></label>
+    <label class="field"><span class="lbl">Description — couleur, matière, marque, saison...</span><textarea id="addDesc" placeholder="Ex. Laine mérinos, bleu marine, Uniqlo, mi-saison"></textarea></label>
+    <button class="btn block" id="btnSaveItem">Enregistrer le vêtement</button>
+  </section>
+
+  <!-- COMPOSER -->
+  <section class="view" id="view-compose">
+    <h2 style="margin-bottom:4px;">Composer un look</h2>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:16px;">Fais défiler chaque rangée. La note s'enregistre toute seule.</p>
+
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:18px;">Fais glisser chaque carte à gauche ou à droite. La note s'enregistre toute seule.</p>
+
+    <div class="swipe-row" data-cat="haut" style="--dot-color:var(--c-haut);">
+      <div class="swipe-label"><span class="lname" style="color:var(--c-haut);">Haut</span><span class="lcount" id="countHaut"></span></div>
+      <div class="swipe-viewport" id="viewportHaut"></div>
+      <div class="swipe-dots" id="dotsHaut"></div>
+    </div>
+    <div class="swipe-row" data-cat="bas" style="--dot-color:var(--c-bas);">
+      <div class="swipe-label"><span class="lname" style="color:var(--c-bas);">Bas</span><span class="lcount" id="countBas"></span></div>
+      <div class="swipe-viewport" id="viewportBas"></div>
+      <div class="swipe-dots" id="dotsBas"></div>
+    </div>
+    <div class="swipe-row" data-cat="chaussures" style="--dot-color:var(--c-chaussures);">
+      <div class="swipe-label"><span class="lname" style="color:var(--c-chaussures);">Chaussures</span><span class="lcount" id="countChaussures"></span></div>
+      <div class="swipe-viewport" id="viewportChaussures"></div>
+      <div class="swipe-dots" id="dotsChaussures"></div>
+    </div>
+
+    <div class="rating-block" id="ratingBlock">
+      <div class="rating-row">
+        <div class="rlabel">Évaluation réelle<span class="sub">tu l'as porté</span></div>
+        <div class="stars" id="starsReal"></div>
+      </div>
+      <div class="rating-row">
+        <div class="rlabel">Évaluation virtuelle<span class="sub">à l'œil, pas testé</span></div>
+        <div class="stars" id="starsVirtual"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MES LOOKS -->
+  <section class="view" id="view-looks">
+    <h2 style="margin-bottom:14px;">Mes looks</h2>
+    <div class="filters" id="lookFilters"></div>
+    <div id="looksList"></div>
+    <div class="hidden-note" id="hiddenNote" style="display:none;"></div>
+    <div class="empty" id="looksEmpty" style="display:none;">
+      <h3>Aucun look noté</h3>
+      <p>Compose un look dans l'onglet « Composer » et mets une note pour qu'il apparaisse ici.</p>
+    </div>
+  </section>
+
+  <!-- REGLAGES -->
+  <section class="view" id="view-settings">
+    <h2 style="margin-bottom:8px;">Réglages</h2>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:6px;">Pense à exporter régulièrement pour ne rien perdre.</p>
+    <div class="settings-row">
+      <div><div class="s-label">Exporter mes données</div><div class="s-sub">Télécharge un fichier de sauvegarde .json</div></div>
+      <button class="btn secondary" id="btnExport">Exporter</button>
+    </div>
+    <div class="settings-row">
+      <div><div class="s-label">Importer une sauvegarde</div><div class="s-sub">Remplace les données actuelles</div></div>
+      <button class="btn secondary" id="btnImport">Importer</button>
+    </div>
+    <input type="file" accept="application/json" id="fileImport" style="display:none;">
+    <div class="settings-row">
+      <div><div class="s-label">Tout effacer</div><div class="s-sub">Supprime vêtements et looks définitivement</div></div>
+      <button class="btn danger" id="btnReset">Effacer</button>
+    </div>
+  </section>
+
+</main>
+
+<nav class="tabbar">
+  <button class="tab active" data-view="wardrobe"><span class="icon">🧺</span>Garde-robe</button>
+  <button class="tab" data-view="add"><span class="icon">➕</span>Ajouter</button>
+  <button class="tab" data-view="compose"><span class="icon">✨</span>Composer</button>
+  <button class="tab" data-view="looks"><span class="icon">📖</span>Looks</button>
+  <button class="tab" data-view="settings"><span class="icon">⚙️</span>Réglages</button>
+</nav>
+
+<div class="overlay" id="itemOverlay">
+  <div class="overlay-top"><span></span><span class="close" id="closeItemOverlay">Fermer</span></div>
+  <div class="overlay-body" id="itemOverlayBody"></div>
+</div>
+
+<div class="overlay" id="lookOverlay">
+  <div class="overlay-top"><span></span><span class="close" id="closeLookOverlay">Fermer</span></div>
+  <div class="overlay-body" id="lookOverlayBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CATEGORIES = [
+    {id:"haut", label:"Haut"}, {id:"bas", label:"Bas"}, {id:"chaussures", label:"Chaussures"},
+    {id:"veste", label:"Veste / manteau"}, {id:"accessoire", label:"Accessoire"}
+  ];
+  var STORE_KEY = "atelier_wardrobe_v2";
+  var OLD_STORE_KEY = "atelier_wardrobe_v1";
+
+  var state = { items: [], looks: [] };
+  var currentFilter = "all";
+  var addCategory = "haut";
+  var compose = { haut:null, bas:null, chaussures:null };
+  var lookStarFilter = {1:false,2:false,3:false,4:true,5:true};
+  var showAllLooks = false;
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(raw){ state = JSON.parse(raw); }
+      else{
+        var old = localStorage.getItem(OLD_STORE_KEY);
+        if(old){
+          var oldState = JSON.parse(old);
+          state.items = oldState.items || [];
+          state.looks = [];
+        }
+      }
+      if(!state.items) state.items = [];
+      if(!state.looks) state.looks = [];
+    }catch(e){ console.error("Erreur de lecture du stockage", e); state = {items:[], looks:[]}; }
+  }
+  function save(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    catch(e){ console.error("Erreur d'écriture", e); showToast("Stockage plein — exporte et allège ta garde-robe"); }
+  }
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  function showToast(msg){
+    var t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 1800);
+  }
+  function catLabel(id){ var c = CATEGORIES.filter(function(c){return c.id===id;})[0]; return c ? c.label : id; }
+  function escapeHtml(s){ return (s||"").replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function itemsByCat(cat){ return state.items.filter(function(i){ return i.category===cat; }); }
+  function findItem(id){ return state.items.filter(function(i){return i.id===id;})[0]; }
+
+  /* ---------- Navigation ---------- */
+  var views = ["wardrobe","add","compose","looks","settings"];
+  function setView(v){
+    views.forEach(function(name){ document.getElementById("view-"+name).classList.toggle("active", name===v); });
+    document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){ btn.classList.toggle("active", btn.dataset.view===v); });
+    var subMap = {wardrobe:"ta garde-robe", add:"nouveau vêtement", compose:"nouveau look", looks:"tes looks", settings:"réglages"};
+    document.getElementById("headerSub").textContent = subMap[v] || "";
+    if(v==="wardrobe") renderWardrobe();
+    if(v==="looks") renderLooks();
+    if(v==="compose") renderComposer();
+  }
+  document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){ btn.addEventListener("click", function(){ setView(btn.dataset.view); }); });
+
+  /* ---------- Wardrobe grid ---------- */
+  function renderFilters(){
+    var box = document.getElementById("filters");
+    var html = '<div class="chip'+(currentFilter==="all"?" active":"")+'" data-f="all">Tout</div>';
+    CATEGORIES.forEach(function(c){ html += '<div class="chip'+(currentFilter===c.id?" active":"")+'" data-f="'+c.id+'">'+c.label+'</div>'; });
+    box.innerHTML = html;
+    box.querySelectorAll(".chip").forEach(function(el){ el.addEventListener("click", function(){ currentFilter = el.dataset.f; renderWardrobe(); }); });
+  }
+  function renderWardrobe(){
+    renderFilters();
+    var grid = document.getElementById("wardrobeGrid");
+    var list = state.items.filter(function(it){ return currentFilter==="all" || it.category===currentFilter; });
+    document.getElementById("wardrobeEmpty").style.display = state.items.length===0 ? "block" : "none";
+    grid.innerHTML = list.map(function(it){
+      return '<div class="card" data-id="'+it.id+'"><img class="thumb" src="'+it.photo+'" alt="">'+
+        '<div class="meta"><div class="name">'+escapeHtml(it.name || catLabel(it.category))+'</div>'+
+        '<div class="cat">'+catLabel(it.category)+'</div></div></div>';
+    }).join("");
+    grid.querySelectorAll(".card").forEach(function(card){ card.addEventListener("click", function(){ openItemDetail(card.dataset.id); }); });
+  }
+
+  function scoreOf(look){ return Math.max(look.real||0, look.virtual||0); }
+
+  function bestLooksForItem(itemId){
+    return state.looks.filter(function(l){
+      return l.haut===itemId || l.bas===itemId || l.chaussures===itemId;
+    }).sort(function(a,b){ return scoreOf(b)-scoreOf(a) || (b.updatedAt-a.updatedAt); });
+  }
+
+  function looksTrioHtml(look, size){
+    var slots = [look.haut, look.bas, look.chaussures];
+    return slots.map(function(id){
+      var it = findItem(id);
+      if(!it) return '';
+      var style = size ? ' style="width:'+size+'px;height:'+size+'px;"' : '';
+      return '<img src="'+it.photo+'"'+style+' alt="">';
+    }).join("");
+  }
+
+  function openItemDetail(id){
+    var it = findItem(id);
+    if(!it) return;
+    var body = document.getElementById("itemOverlayBody");
+    var best = bestLooksForItem(id).slice(0, 8);
+    var bestHtml = best.length ? best.map(function(l){
+      return '<div class="best-look-row" data-key="'+l.key+'"><div class="imgs">'+looksTrioHtml(l,42)+'</div>'+
+        '<div class="sc">'+(l.real?('★ '+l.real):'')+(l.real&&l.virtual?' · ':'')+(l.virtual?('👁 '+l.virtual):'')+'</div></div>';
+    }).join("") : '<p style="font-size:13px;color:var(--ink-soft);padding:8px 0;">Pas encore de look noté avec ce vêtement. Va dans Composer pour en créer un.</p>';
+    body.innerHTML =
+      '<img class="big" src="'+it.photo+'" alt="">'+
+      '<h2 style="margin-bottom:4px;">'+escapeHtml(it.name || catLabel(it.category))+'</h2>'+
+      '<div style="color:var(--ink-soft);font-size:13px;margin-bottom:6px;">'+catLabel(it.category)+'</div>'+
+      '<p style="font-size:14.5px;line-height:1.55;margin-bottom:22px;">'+escapeHtml(it.description || "Pas de description.")+'</p>'+
+      '<h3 style="font-size:16px;margin-bottom:8px;">Meilleurs looks avec ce vêtement</h3>'+
+      bestHtml+
+      '<button class="btn danger block" style="margin-top:26px;" id="deleteItemBtn">Supprimer ce vêtement</button>';
+    body.querySelectorAll(".best-look-row").forEach(function(row){
+      row.addEventListener("click", function(){
+        document.getElementById("itemOverlay").classList.remove("show");
+        openLookDetail(row.dataset.key);
+      });
+    });
+    document.getElementById("deleteItemBtn").addEventListener("click", function(){
+      if(confirm("Supprimer définitivement ce vêtement ? Les looks qui l'utilisent seront aussi supprimés.")){
+        state.items = state.items.filter(function(i){return i.id!==id;});
+        state.looks = state.looks.filter(function(l){ return l.haut!==id && l.bas!==id && l.chaussures!==id; });
+        save();
+        document.getElementById("itemOverlay").classList.remove("show");
+        renderWardrobe();
+        showToast("Vêtement supprimé");
+      }
+    });
+    document.getElementById("itemOverlay").classList.add("show");
+  }
+  document.getElementById("closeItemOverlay").addEventListener("click", function(){ document.getElementById("itemOverlay").classList.remove("show"); });
+
+  /* ---------- Add item ---------- */
+  function renderAddCatPicker(){
+    var box = document.getElementById("addCatPicker");
+    box.innerHTML = CATEGORIES.map(function(c){ return '<div class="opt'+(addCategory===c.id?" active":"")+'" data-c="'+c.id+'">'+c.label+'</div>'; }).join("");
+    box.querySelectorAll(".opt").forEach(function(el){ el.addEventListener("click", function(){ addCategory = el.dataset.c; renderAddCatPicker(); }); });
+  }
+  renderAddCatPicker();
+
+  var pendingPhoto = null;
+  function handleFile(file){
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var maxW = 900; var scale = Math.min(1, maxW/img.width);
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width*scale; canvas.height = img.height*scale;
+        var ctx = canvas.getContext("2d"); ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        pendingPhoto = canvas.toDataURL("image/jpeg", 0.72);
+        var prev = document.getElementById("addPreview"); prev.src = pendingPhoto; prev.style.display = "block";
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  document.getElementById("btnCamera").addEventListener("click", function(){ document.getElementById("fileCamera").click(); });
+  document.getElementById("btnGallery").addEventListener("click", function(){ document.getElementById("fileGallery").click(); });
+  document.getElementById("fileCamera").addEventListener("change", function(e){ handleFile(e.target.files[0]); });
+  document.getElementById("fileGallery").addEventListener("change", function(e){ handleFile(e.target.files[0]); });
+
+  document.getElementById("btnSaveItem").addEventListener("click", function(){
+    if(!pendingPhoto){ showToast("Ajoute d'abord une photo"); return; }
+    var name = document.getElementById("addName").value.trim();
+    var desc = document.getElementById("addDesc").value.trim();
+    state.items.push({ id: uid(), category: addCategory, name: name, description: desc, photo: pendingPhoto, createdAt: Date.now() });
+    save();
+    pendingPhoto = null;
+    document.getElementById("addPreview").style.display = "none";
+    document.getElementById("addPreview").src = "";
+    document.getElementById("addName").value = "";
+    document.getElementById("addDesc").value = "";
+    document.getElementById("fileCamera").value = "";
+    document.getElementById("fileGallery").value = "";
+    showToast("Vêtement enregistré");
+    setView("wardrobe");
+  });
+
+  /* ---------- Composer (swipe cards) ---------- */
+  var CAT_ACCENT = { haut:"var(--c-haut)", bas:"var(--c-bas)", chaussures:"var(--c-chaussures)" };
+  var swipeIndex = { haut:0, bas:0, chaussures:0 };
+
+  function comboKey(){ return (compose.haut||"x")+"|"+(compose.bas||"x")+"|"+(compose.chaussures||"x"); }
+  function findLookByCombo(){
+    if(!compose.haut || !compose.bas || !compose.chaussures) return null;
+    var key = comboKey();
+    return state.looks.filter(function(l){ return l.key===key; })[0] || null;
+  }
+
+  function renderComposer(){
+    ["haut","bas","chaussures"].forEach(function(cat){ renderSwipeRow(cat); });
+    renderRatingStars();
+  }
+
+  function renderSwipeRow(cat){
+    var items = itemsByCat(cat);
+    var vp = document.getElementById("viewport"+capitalize(cat));
+    var dotsBox = document.getElementById("dots"+capitalize(cat));
+    var countEl = document.getElementById("count"+capitalize(cat));
+    countEl.textContent = items.length ? "" : "";
+    if(items.length===0){
+      vp.innerHTML = '<div class="swipe-empty">Aucun « '+catLabel(cat)+' » — ajoute-en un dans l\'onglet Ajouter.</div>';
+      dotsBox.innerHTML = "";
+      compose[cat] = null;
+      return;
+    }
+    if(swipeIndex[cat] >= items.length) swipeIndex[cat] = 0;
+    compose[cat] = items[swipeIndex[cat]].id;
+    countEl.textContent = (swipeIndex[cat]+1) + " / " + items.length;
+    buildSwipeCard(cat, vp, items);
+    buildDots(cat, dotsBox, items);
+  }
+
+  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  function buildDots(cat, box, items){
+    if(items.length<2){ box.innerHTML=""; return; }
+    box.innerHTML = items.map(function(it,i){ return '<div class="dot'+(i===swipeIndex[cat]?" active":"")+'"></div>'; }).join("");
+  }
+
+  function cardInnerHtml(it, cat){
+    return '<img src="'+it.photo+'" alt=""><div class="grad"></div>'+
+      '<div class="cap"><div class="cn">'+escapeHtml(it.name||catLabel(cat))+'</div><div class="cc">'+catLabel(cat)+'</div></div>';
+  }
+
+  function buildSwipeCard(cat, vp, items){
+    vp.innerHTML = "";
+    var it = items[swipeIndex[cat]];
+    var card = document.createElement("div");
+    card.className = "swipe-card";
+    card.innerHTML = cardInnerHtml(it, cat);
+    vp.appendChild(card);
+    attachSwipe(card, cat, items, vp);
+  }
+
+  function attachSwipe(card, cat, items, vp){
+    var startX=0, startY=0, dx=0, dragging=false, decided=false, isHorizontal=false;
+    var W = vp.clientWidth || 300;
+
+    function onDown(e){
+      var p = e.touches ? e.touches[0] : e;
+      startX = p.clientX; startY = p.clientY; dx = 0; dragging = true; decided=false; isHorizontal=false;
+      card.classList.add("dragging");
+    }
+    function onMove(e){
+      if(!dragging) return;
+      var p = e.touches ? e.touches[0] : e;
+      var ddx = p.clientX - startX;
+      var ddy = p.clientY - startY;
+      if(!decided){
+        if(Math.abs(ddx) > 8 || Math.abs(ddy) > 8){ decided = true; isHorizontal = Math.abs(ddx) > Math.abs(ddy); }
+      }
+      if(!isHorizontal) return;
+      if(e.cancelable) e.preventDefault();
+      dx = ddx;
+      var rot = Math.max(-14, Math.min(14, dx/12));
+      card.style.transform = "translateX("+dx+"px) rotate("+rot+"deg)";
+      card.style.opacity = String(1 - Math.min(0.35, Math.abs(dx)/(W*1.4)));
+    }
+    function onUp(){
+      if(!dragging) return;
+      dragging = false;
+      card.classList.remove("dragging");
+      var threshold = Math.min(110, W*0.28);
+      if(isHorizontal && Math.abs(dx) > threshold){
+        var dir = dx > 0 ? 1 : -1;
+        card.style.transition = "transform .22s ease, opacity .22s ease";
+        card.style.transform = "translateX("+(dir*W*1.3)+"px) rotate("+(dir*16)+"deg)";
+        card.style.opacity = "0";
+        setTimeout(function(){
+          var len = items.length;
+          swipeIndex[cat] = ((swipeIndex[cat] - dir) % len + len) % len;
+          compose[cat] = items[swipeIndex[cat]].id;
+          var vpEl = document.getElementById("viewport"+capitalize(cat));
+          buildSwipeCard(cat, vpEl, items);
+          var newCard = vpEl.querySelector(".swipe-card");
+          newCard.style.transition = "none";
+          newCard.style.transform = "translateX("+(-dir*W*1.1)+"px) rotate("+(-dir*10)+"deg)";
+          newCard.style.opacity = "0";
+          requestAnimationFrame(function(){
+            newCard.style.transition = "transform .22s ease, opacity .22s ease";
+            newCard.style.transform = "translateX(0) rotate(0deg)";
+            newCard.style.opacity = "1";
+          });
+          buildDots(cat, document.getElementById("dots"+capitalize(cat)), items);
+          document.getElementById("count"+capitalize(cat)).textContent = (swipeIndex[cat]+1) + " / " + items.length;
+          renderRatingStars();
+        }, 220);
+      } else {
+        card.style.transition = "transform .18s ease, opacity .18s ease";
+        card.style.transform = "translateX(0) rotate(0deg)";
+        card.style.opacity = "1";
+      }
+    }
+    card.addEventListener("touchstart", onDown, {passive:true});
+    card.addEventListener("touchmove", onMove, {passive:false});
+    card.addEventListener("touchend", onUp);
+    card.addEventListener("touchcancel", onUp);
+    card.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }
+
+  function renderRatingStars(){
+    var look = findLookByCombo();
+    var real = look ? (look.real||0) : 0;
+    var virt = look ? (look.virtual||0) : 0;
+    document.getElementById("starsReal").innerHTML = starsHtml(real, false);
+    document.getElementById("starsVirtual").innerHTML = starsHtml(virt, true);
+    document.querySelectorAll("#starsReal .star").forEach(function(s){
+      s.addEventListener("click", function(){ setRating("real", parseInt(s.dataset.val,10)); });
+    });
+    document.querySelectorAll("#starsVirtual .star").forEach(function(s){
+      s.addEventListener("click", function(){ setRating("virtual", parseInt(s.dataset.val,10)); });
+    });
+  }
+  function starsHtml(val, virtual){
+    var out = "";
+    for(var i=1;i<=5;i++){
+      out += '<span class="star'+(virtual?" virtual":"")+(i<=val?" on":"")+'" data-val="'+i+'">★</span>';
+    }
+    return out;
+  }
+
+  function setRating(kind, val){
+    if(!compose.haut || !compose.bas || !compose.chaussures){ showToast("Choisis un haut, un bas et des chaussures"); return; }
+    var key = comboKey();
+    var look = state.looks.filter(function(l){ return l.key===key; })[0];
+    if(!look){
+      look = { key:key, haut:compose.haut, bas:compose.bas, chaussures:compose.chaussures, real:0, virtual:0, createdAt:Date.now(), updatedAt:Date.now() };
+      state.looks.push(look);
+    }
+    var current = look[kind] || 0;
+    look[kind] = (current === val) ? 0 : val;
+    look.updatedAt = Date.now();
+    if(!look.real && !look.virtual){
+      state.looks = state.looks.filter(function(l){ return l.key!==key; });
+    }
+    save();
+    renderRatingStars();
+    showToast(kind==="real" ? "Évaluation réelle enregistrée" : "Évaluation virtuelle enregistrée");
+  }
+
+  /* ---------- Looks list ---------- */
+  function renderLookFilters(){
+    var box = document.getElementById("lookFilters");
+    var stars = [5,4,3,2,1];
+    box.innerHTML = stars.map(function(n){
+      return '<div class="chip'+(lookStarFilter[n]?" active":"")+'" data-s="'+n+'">'+"★".repeat(n)+'</div>';
+    }).join("");
+    box.querySelectorAll(".chip").forEach(function(el){
+      el.addEventListener("click", function(){
+        var n = parseInt(el.dataset.s,10);
+        lookStarFilter[n] = !lookStarFilter[n];
+        renderLooks();
+      });
+    });
+  }
+  function renderLooks(){
+    renderLookFilters();
+    var list = document.getElementById("looksList");
+    var hiddenNote = document.getElementById("hiddenNote");
+    document.getElementById("looksEmpty").style.display = state.looks.length===0 ? "block" : "none";
+    var all = state.looks.slice().sort(function(a,b){ return scoreOf(b)-scoreOf(a) || (b.updatedAt-a.updatedAt); });
+    var visible = all.filter(function(l){ return lookStarFilter[scoreOf(l)]; });
+    var hiddenCount = all.length - visible.length;
+    list.innerHTML = visible.map(function(l){
+      return '<div class="look-card" data-key="'+l.key+'"><div class="imgs">'+looksTrioHtml(l,48)+'</div>'+
+        '<div class="info"><div class="lscores">'+
+        (l.real ? '<span>Réelle <b>'+"★".repeat(l.real)+'</b></span>' : '<span>Réelle —</span>')+
+        (l.virtual ? '<span>Virtuelle <b>'+"★".repeat(l.virtual)+'</b></span>' : '<span>Virtuelle —</span>')+
+        '</div></div></div>';
+    }).join("");
+    list.querySelectorAll(".look-card").forEach(function(el){ el.addEventListener("click", function(){ openLookDetail(el.dataset.key); }); });
+    if(hiddenCount > 0){
+      hiddenNote.style.display = "block";
+      hiddenNote.innerHTML = hiddenCount + " look(s) masqué(s) (1 à 3 étoiles). <button id=\"showAllBtn\">Tout afficher</button>";
+      document.getElementById("showAllBtn").addEventListener("click", function(){
+        lookStarFilter = {1:true,2:true,3:true,4:true,5:true};
+        renderLooks();
+      });
+    } else {
+      hiddenNote.style.display = "none";
+    }
+  }
+
+  function openLookDetail(key){
+    var look = state.looks.filter(function(l){return l.key===key;})[0];
+    if(!look) return;
+    var body = document.getElementById("lookOverlayBody");
+    body.innerHTML =
+      '<div class="trio">'+looksTrioHtml(look, null)+'</div>'+
+      '<div class="rating-block" style="margin-bottom:20px;">'+
+        '<div class="rating-row"><div class="rlabel">Évaluation réelle</div><div class="stars" id="detStarsReal"></div></div>'+
+        '<div class="rating-row"><div class="rlabel">Évaluation virtuelle</div><div class="stars" id="detStarsVirtual"></div></div>'+
+      '</div>'+
+      '<button class="btn danger block" id="deleteLookBtn">Réinitialiser les notes de ce look</button>';
+    function refreshDetailStars(){
+      document.getElementById("detStarsReal").innerHTML = starsHtml(look.real||0, false);
+      document.getElementById("detStarsVirtual").innerHTML = starsHtml(look.virtual||0, true);
+      body.querySelectorAll("#detStarsReal .star").forEach(function(s){
+        s.addEventListener("click", function(){ applyDetailRating("real", parseInt(s.dataset.val,10)); });
+      });
+      body.querySelectorAll("#detStarsVirtual .star").forEach(function(s){
+        s.addEventListener("click", function(){ applyDetailRating("virtual", parseInt(s.dataset.val,10)); });
+      });
+    }
+    function applyDetailRating(kind, val){
+      var current = look[kind] || 0;
+      look[kind] = (current === val) ? 0 : val;
+      look.updatedAt = Date.now();
+      if(!look.real && !look.virtual){
+        state.looks = state.looks.filter(function(l){ return l.key!==key; });
+        save();
+        document.getElementById("lookOverlay").classList.remove("show");
+        renderLooks();
+        showToast("Look supprimé (plus de note)");
+        return;
+      }
+      save();
+      refreshDetailStars();
+      renderLooks();
+    }
+    refreshDetailStars();
+    document.getElementById("deleteLookBtn").addEventListener("click", function(){
+      if(confirm("Remettre les deux notes à zéro ? Le look disparaîtra de la liste.")){
+        state.looks = state.looks.filter(function(l){ return l.key!==key; });
+        save();
+        document.getElementById("lookOverlay").classList.remove("show");
+        renderLooks();
+        showToast("Look réinitialisé");
+      }
+    });
+    document.getElementById("lookOverlay").classList.add("show");
+  }
+  document.getElementById("closeLookOverlay").addEventListener("click", function(){ document.getElementById("lookOverlay").classList.remove("show"); });
+
+  /* ---------- Settings ---------- */
+  document.getElementById("btnExport").addEventListener("click", function(){
+    try{
+      var blob = new Blob([JSON.stringify(state)], {type:"application/json"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a"); var d = new Date();
+      a.href = url; a.download = "atelier-sauvegarde-"+d.toISOString().slice(0,10)+".json";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+      showToast("Export lancé");
+    }catch(e){ console.error(e); showToast("Échec de l'export"); }
+  });
+  document.getElementById("btnImport").addEventListener("click", function(){ document.getElementById("fileImport").click(); });
+  document.getElementById("fileImport").addEventListener("change", function(e){
+    var file = e.target.files[0]; if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        var data = JSON.parse(ev.target.result);
+        if(!data.items) throw new Error("format invalide");
+        if(!data.looks) data.looks = [];
+        if(confirm("Remplacer toutes les données actuelles par cette sauvegarde ?")){
+          state = data; save(); renderWardrobe(); showToast("Sauvegarde importée");
+        }
+      }catch(err){ showToast("Fichier de sauvegarde invalide"); }
+    };
+    reader.readAsText(file); e.target.value = "";
+  });
+  document.getElementById("btnReset").addEventListener("click", function(){
+    if(confirm("Effacer définitivement tous les vêtements et looks ?")){
+      if(confirm("Vraiment sûr ? Cette action est irréversible.")){
+        state = {items:[], looks:[]}; save(); renderWardrobe(); showToast("Données effacées");
+      }
+    }
+  });
+
+  /* ---------- Init ---------- */
+  load();
+  renderWardrobe();
+})();
+</script>
+</body>
+</html>
