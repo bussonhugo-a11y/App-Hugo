@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2EFE9;
+    --bg-elevated:#FBFAF7;
+    --ink:#232220;
+    --ink-soft:#6B6459;
+    --line:#DBD5C9;
+    --accent:#3B4A6B;
+    --accent-soft:#DCE1EA;
+    --sage:#7C8A72;
+    --danger:#A8503F;
+    --star-on:#B98B3E;
+    --star-off:#D9D2C3;
+    --radius-s:3px;
+    --radius-m:10px;
+    --shadow: 0 1px 2px rgba(35,34,32,0.06), 0 4px 14px rgba(35,34,32,0.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1B1A18;
+      --bg-elevated:#242220;
+      --ink:#EEE9DF;
+      --ink-soft:#A79E8F;
+      --line:#3A362F;
+      --accent:#8FA3CE;
+      --accent-soft:#2A3244;
+      --sage:#9BAE8F;
+      --danger:#D98A76;
+      --star-on:#D9A94F;
+      --star-off:#4A4539;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B1A18;
+    --bg-elevated:#242220;
+    --ink:#EEE9DF;
+    --ink-soft:#A79E8F;
+    --line:#3A362F;
+    --accent:#8FA3CE;
+    --accent-soft:#2A3244;
+    --sage:#9BAE8F;
+    --danger:#D98A76;
+    --star-on:#D9A94F;
+    --star-off:#4A4539;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Work Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:calc(76px + env(safe-area-inset-bottom));
+  }
+  h1,h2,h3{font-family:'Fraunces', Georgia, serif; font-weight:500; margin:0;}
+  ::selection{background:var(--accent-soft);}
+
+  header.top{
+    padding:calc(18px + env(safe-area-inset-top)) 20px 14px;
+    display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    background:var(--bg);
+    position:sticky; top:0; z-index:5;
+  }
+  header.top .mark{font-family:'Fraunces',serif; font-size:22px; font-style:italic; letter-spacing:0.2px;}
+  header.top .sub{font-size:12px; color:var(--ink-soft);}
+
+  main{padding:18px 16px 8px; max-width:640px; margin:0 auto;}
+  .view{display:none;}
+  .view.active{display:block; animation:fadein .18s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  /* Wardrobe grid */
+  .filters{display:flex; gap:8px; overflow-x:auto; padding-bottom:14px; -ms-overflow-style:none; scrollbar-width:none;}
+  .filters::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto; padding:7px 14px; border-radius:999px; border:1px solid var(--line);
+    font-size:13px; color:var(--ink-soft); background:var(--bg-elevated); cursor:pointer; white-space:nowrap;
+  }
+  .chip.active{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+  .card{
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m);
+    overflow:hidden; box-shadow:var(--shadow); cursor:pointer;
+  }
+  .card .thumb{width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--accent-soft); display:block;}
+  .card .meta{padding:9px 10px 11px;}
+  .card .meta .name{font-size:13.5px; font-weight:500; line-height:1.25;}
+  .card .meta .cat{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+
+  .empty{
+    text-align:center; padding:50px 20px; color:var(--ink-soft);
+  }
+  .empty h3{color:var(--ink); font-size:19px; margin-bottom:8px;}
+  .empty p{font-size:13.5px; line-height:1.5; max-width:280px; margin:0 auto;}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    padding:12px 18px; border-radius:var(--radius-s); border:1px solid var(--ink);
+    background:var(--ink); color:var(--bg); font-family:'Work Sans',sans-serif; font-size:14.5px; font-weight:500;
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+  }
+  .btn.secondary{background:transparent; color:var(--ink); border-color:var(--line);}
+  .btn.danger{background:transparent; color:var(--danger); border-color:var(--danger);}
+  .btn.block{width:100%;}
+  .btn:active{opacity:0.75;}
+
+  /* Forms */
+  label.field{display:block; margin-bottom:16px;}
+  label.field .lbl{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:6px;}
+  input[type=text], textarea, select{
+    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:var(--radius-s);
+    background:var(--bg-elevated); color:var(--ink); font-family:'Work Sans',sans-serif; font-size:14.5px;
+  }
+  textarea{min-height:70px; resize:vertical;}
+  .cat-picker{display:flex; gap:8px; flex-wrap:wrap;}
+  .cat-picker .opt{
+    padding:8px 13px; border-radius:999px; border:1px solid var(--line); font-size:13px; cursor:pointer; background:var(--bg-elevated);
+  }
+  .cat-picker .opt.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+
+  .photo-row{display:flex; gap:10px; margin-bottom:16px;}
+  .photo-row .btn{flex:1;}
+  .preview-photo{
+    width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:var(--radius-m); border:1px solid var(--line);
+    margin-bottom:16px; background:var(--accent-soft); display:none;
+  }
+
+  /* Composer */
+  .slot{
+    border:1px dashed var(--line); border-radius:var(--radius-m); padding:12px; margin-bottom:12px;
+    display:flex; align-items:center; gap:12px; min-height:64px; cursor:pointer; background:var(--bg-elevated);
+  }
+  .slot.filled{border-style:solid;}
+  .slot img{width:52px; height:52px; object-fit:cover; border-radius:var(--radius-s); flex:0 0 auto;}
+  .slot .slot-label{font-size:12px; color:var(--ink-soft); text-transform:none;}
+  .slot .slot-name{font-size:14.5px; font-weight:500;}
+  .slot .placeholder{color:var(--ink-soft); font-size:13.5px;}
+
+  .picker-sheet{
+    position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:30; display:none; align-items:flex-end;
+  }
+  .picker-sheet.show{display:flex;}
+  .picker-panel{
+    background:var(--bg); width:100%; max-height:75vh; border-radius:16px 16px 0 0; padding:16px 16px calc(16px + env(safe-area-inset-bottom));
+    overflow-y:auto;
+  }
+  .picker-panel h3{margin-bottom:12px;}
+  .pick-item{display:flex; align-items:center; gap:12px; padding:10px 4px; border-bottom:1px solid var(--line); cursor:pointer;}
+  .pick-item img{width:44px; height:44px; object-fit:cover; border-radius:var(--radius-s);}
+  .pick-item .n{font-size:14px;}
+
+  .criteria{margin:18px 0;}
+  .crit-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .crit-row .crit-name{font-size:14px;}
+  .stars{display:flex; gap:3px;}
+  .star{font-size:22px; color:var(--star-off); cursor:pointer; line-height:1;}
+  .star.on{color:var(--star-on);}
+
+  /* Looks list */
+  .look-card{
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m);
+    padding:12px; margin-bottom:12px; box-shadow:var(--shadow); cursor:pointer;
+  }
+  .look-card .imgs{display:flex; gap:6px; margin-bottom:10px;}
+  .look-card .imgs img{width:56px; height:56px; object-fit:cover; border-radius:var(--radius-s); border:1px solid var(--line);}
+  .look-card .lname{font-size:15.5px; font-weight:500; font-family:'Fraunces',serif;}
+  .look-card .lnote{font-size:12.5px; color:var(--ink-soft); margin-top:3px;}
+  .mini-stars{font-size:12px; color:var(--star-on); margin-top:6px;}
+
+  /* Detail overlay */
+  .overlay{
+    position:fixed; inset:0; background:var(--bg); z-index:20; display:none; overflow-y:auto;
+  }
+  .overlay.show{display:block;}
+  .overlay-top{
+    padding:calc(14px + env(safe-area-inset-top)) 16px 12px; display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--bg); z-index:2;
+  }
+  .overlay-top .close{font-size:15px; color:var(--ink-soft); cursor:pointer;}
+  .overlay-body{padding:18px 16px 40px; max-width:640px; margin:0 auto;}
+  .overlay-body img.big{width:100%; max-height:50vh; object-fit:contain; border-radius:var(--radius-m); background:var(--accent-soft); margin-bottom:14px;}
+  .overlay-body .trio{display:flex; gap:8px; margin-bottom:16px;}
+  .overlay-body .trio img{width:31%; aspect-ratio:1/1; object-fit:cover; border-radius:var(--radius-s); border:1px solid var(--line);}
+
+  /* Tab bar */
+  nav.tabbar{
+    position:fixed; bottom:0; left:0; right:0; z-index:15;
+    background:var(--bg-elevated); border-top:1px solid var(--line);
+    padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+    display:flex; justify-content:space-around;
+  }
+  nav.tabbar button{
+    background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:var(--ink-soft); font-family:'Work Sans',sans-serif; font-size:10.5px; cursor:pointer; padding:4px 8px;
+  }
+  nav.tabbar button .icon{font-size:20px;}
+  nav.tabbar button.active{color:var(--ink);}
+
+  .toast{
+    position:fixed; bottom:calc(90px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%);
+    background:var(--ink); color:var(--bg); padding:10px 18px; border-radius:999px; font-size:13px;
+    opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:40;
+  }
+  .toast.show{opacity:1;}
+
+  .settings-row{display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line);}
+  .settings-row .s-label{font-size:14px;}
+  .settings-row .s-sub{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <div class="mark">Atelier</div>
+    <div class="sub" id="headerSub">ta garde-robe</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- GARDE-ROBE -->
+  <section class="view active" id="view-wardrobe">
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="wardrobeGrid"></div>
+    <div class="empty" id="wardrobeEmpty" style="display:none;">
+      <h3>Rien ici pour l'instant</h3>
+      <p>Ajoute ton premier vêtement depuis l'onglet « Ajouter ».</p>
+    </div>
+  </section>
+
+  <!-- AJOUTER -->
+  <section class="view" id="view-add">
+    <h2 style="margin-bottom:18px;">Ajouter un vêtement</h2>
+
+    <img id="addPreview" class="preview-photo" alt="">
+    <div class="photo-row">
+      <button class="btn secondary" id="btnCamera">📷 Prendre une photo</button>
+      <button class="btn secondary" id="btnGallery">🖼️ Depuis la galerie</button>
+    </div>
+    <input type="file" accept="image/*" capture="environment" id="fileCamera" style="display:none;">
+    <input type="file" accept="image/*" id="fileGallery" style="display:none;">
+
+    <label class="field">
+      <span class="lbl">Catégorie</span>
+      <div class="cat-picker" id="addCatPicker"></div>
+    </label>
+
+    <label class="field">
+      <span class="lbl">Nom (optionnel)</span>
+      <input type="text" id="addName" placeholder="Ex. Pull col rond bleu marine">
+    </label>
+
+    <label class="field">
+      <span class="lbl">Description — couleur, matière, marque, saison...</span>
+      <textarea id="addDesc" placeholder="Ex. Laine mérinos, bleu marine, Uniqlo, mi-saison"></textarea>
+    </label>
+
+    <button class="btn block" id="btnSaveItem">Enregistrer le vêtement</button>
+  </section>
+
+  <!-- COMPOSER -->
+  <section class="view" id="view-compose">
+    <h2 style="margin-bottom:18px;">Composer un look</h2>
+
+    <div class="slot" data-slot="haut" id="slotHaut">
+      <div class="slot-content"><span class="placeholder">Choisir un haut</span></div>
+    </div>
+    <div class="slot" data-slot="bas" id="slotBas">
+      <div class="slot-content"><span class="placeholder">Choisir un bas</span></div>
+    </div>
+    <div class="slot" data-slot="chaussures" id="slotChaussures">
+      <div class="slot-content"><span class="placeholder">Choisir des chaussures</span></div>
+    </div>
+    <div class="slot" data-slot="veste" id="slotVeste">
+      <div class="slot-content"><span class="placeholder">Veste / manteau (optionnel)</span></div>
+    </div>
+    <div class="slot" data-slot="accessoire" id="slotAccessoire">
+      <div class="slot-content"><span class="placeholder">Accessoire (optionnel)</span></div>
+    </div>
+
+    <label class="field" style="margin-top:18px;">
+      <span class="lbl">Nom du look</span>
+      <input type="text" id="lookName" placeholder="Ex. Bureau du lundi">
+    </label>
+
+    <div class="criteria" id="criteriaBox"></div>
+
+    <label class="field">
+      <span class="lbl">Notes</span>
+      <textarea id="lookNote" placeholder="Ex. Parfait pour un entretien, un peu chaud en été..."></textarea>
+    </label>
+
+    <button class="btn block" id="btnSaveLook">Enregistrer le look</button>
+  </section>
+
+  <!-- MES LOOKS -->
+  <section class="view" id="view-looks">
+    <h2 style="margin-bottom:18px;">Mes looks</h2>
+    <div id="looksList"></div>
+    <div class="empty" id="looksEmpty" style="display:none;">
+      <h3>Aucun look enregistré</h3>
+      <p>Compose ton premier look depuis l'onglet « Looks ».</p>
+    </div>
+  </section>
+
+  <!-- REGLAGES -->
+  <section class="view" id="view-settings">
+    <h2 style="margin-bottom:8px;">Réglages</h2>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:6px;">Tout est stocké uniquement sur cet iPhone, dans Safari. Pense à exporter régulièrement pour ne rien perdre.</p>
+
+    <div class="settings-row">
+      <div>
+        <div class="s-label">Exporter mes données</div>
+        <div class="s-sub">Télécharge un fichier de sauvegarde .json</div>
+      </div>
+      <button class="btn secondary" id="btnExport">Exporter</button>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="s-label">Importer une sauvegarde</div>
+        <div class="s-sub">Remplace les données actuelles</div>
+      </div>
+      <button class="btn secondary" id="btnImport">Importer</button>
+    </div>
+    <input type="file" accept="application/json" id="fileImport" style="display:none;">
+    <div class="settings-row">
+      <div>
+        <div class="s-label">Tout effacer</div>
+        <div class="s-sub">Supprime vêtements et looks définitivement</div>
+      </div>
+      <button class="btn danger" id="btnReset">Effacer</button>
+    </div>
+
+    <h2 style="margin:28px 0 10px; font-size:17px;">Diagnostic de stockage</h2>
+    <div id="diagBox" style="font-size:13px; line-height:1.8; color:var(--ink-soft); background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m); padding:14px;"></div>
+  </section>
+
+</main>
+
+<nav class="tabbar">
+  <button class="tab active" data-view="wardrobe"><span class="icon">🧺</span>Garde-robe</button>
+  <button class="tab" data-view="add"><span class="icon">➕</span>Ajouter</button>
+  <button class="tab" data-view="compose"><span class="icon">✨</span>Composer</button>
+  <button class="tab" data-view="looks"><span class="icon">📖</span>Looks</button>
+  <button class="tab" data-view="settings"><span class="icon">⚙️</span>Réglages</button>
+</nav>
+
+<div class="picker-sheet" id="pickerSheet">
+  <div class="picker-panel">
+    <h3 id="pickerTitle">Choisir</h3>
+    <div id="pickerList"></div>
+    <button class="btn secondary block" id="pickerCancel" style="margin-top:12px;">Annuler</button>
+  </div>
+</div>
+
+<div class="overlay" id="itemOverlay">
+  <div class="overlay-top">
+    <span></span>
+    <span class="close" id="closeItemOverlay">Fermer</span>
+  </div>
+  <div class="overlay-body" id="itemOverlayBody"></div>
+</div>
+
+<div class="overlay" id="lookOverlay">
+  <div class="overlay-top">
+    <span></span>
+    <span class="close" id="closeLookOverlay">Fermer</span>
+  </div>
+  <div class="overlay-body" id="lookOverlayBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CATEGORIES = [
+    {id:"haut", label:"Haut"},
+    {id:"bas", label:"Bas"},
+    {id:"chaussures", label:"Chaussures"},
+    {id:"veste", label:"Veste / manteau"},
+    {id:"accessoire", label:"Accessoire"}
+  ];
+  var CRITERIA = ["Confort","Style","Praticité","Occasion"];
+  var STORE_KEY = "atelier_wardrobe_v1";
+
+  var state = { items: [], looks: [] };
+  var currentFilter = "all";
+  var addCategory = "haut";
+  var composeSelection = {};
+  var lookRatings = {};
+  var pickerTargetSlot = null;
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(raw){ state = JSON.parse(raw); }
+      if(!state.items) state.items = [];
+      if(!state.looks) state.looks = [];
+    }catch(e){ console.error("Erreur de lecture du stockage", e); state = {items:[], looks:[]}; }
+  }
+  function save(){
+    try{
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    }catch(e){
+      console.error("Erreur d'écriture", e);
+      showToast("Stockage plein — exporte et allège ta garde-robe");
+    }
+  }
+  function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 1800);
+  }
+
+  function catLabel(id){
+    var c = CATEGORIES.filter(function(c){return c.id===id;})[0];
+    return c ? c.label : id;
+  }
+
+  /* ---------- Navigation ---------- */
+  var views = ["wardrobe","add","compose","looks","settings"];
+  function setView(v){
+    views.forEach(function(name){
+      document.getElementById("view-"+name).classList.toggle("active", name===v);
+    });
+    document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){
+      btn.classList.toggle("active", btn.dataset.view===v);
+    });
+    var subMap = {wardrobe:"ta garde-robe", add:"nouveau vêtement", compose:"nouveau look", looks:"tes looks", settings:"réglages"};
+    document.getElementById("headerSub").textContent = subMap[v] || "";
+    if(v==="wardrobe") renderWardrobe();
+    if(v==="looks") renderLooks();
+    if(v==="compose") renderComposer();
+  }
+  document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){
+    btn.addEventListener("click", function(){ setView(btn.dataset.view); });
+  });
+
+  /* ---------- Wardrobe grid ---------- */
+  function renderFilters(){
+    var box = document.getElementById("filters");
+    var html = '<div class="chip'+(currentFilter==="all"?" active":"")+'" data-f="all">Tout</div>';
+    CATEGORIES.forEach(function(c){
+      html += '<div class="chip'+(currentFilter===c.id?" active":"")+'" data-f="'+c.id+'">'+c.label+'</div>';
+    });
+    box.innerHTML = html;
+    box.querySelectorAll(".chip").forEach(function(el){
+      el.addEventListener("click", function(){ currentFilter = el.dataset.f; renderWardrobe(); });
+    });
+  }
+  function renderWardrobe(){
+    renderFilters();
+    var grid = document.getElementById("wardrobeGrid");
+    var list = state.items.filter(function(it){ return currentFilter==="all" || it.category===currentFilter; });
+    document.getElementById("wardrobeEmpty").style.display = state.items.length===0 ? "block" : "none";
+    grid.innerHTML = list.map(function(it){
+      return '<div class="card" data-id="'+it.id+'">'+
+        '<img class="thumb" src="'+it.photo+'" alt="">'+
+        '<div class="meta"><div class="name">'+escapeHtml(it.name || catLabel(it.category))+'</div>'+
+        '<div class="cat">'+catLabel(it.category)+'</div></div></div>';
+    }).join("");
+    grid.querySelectorAll(".card").forEach(function(card){
+      card.addEventListener("click", function(){ openItemDetail(card.dataset.id); });
+    });
+  }
+  function escapeHtml(s){
+    return (s||"").replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function openItemDetail(id){
+    var it = state.items.filter(function(i){return i.id===id;})[0];
+    if(!it) return;
+    var body = document.getElementById("itemOverlayBody");
+    body.innerHTML =
+      '<img class="big" src="'+it.photo+'" alt="">'+
+      '<h2 style="margin-bottom:4px;">'+escapeHtml(it.name || catLabel(it.category))+'</h2>'+
+      '<div style="color:var(--ink-soft);font-size:13px;margin-bottom:14px;">'+catLabel(it.category)+'</div>'+
+      '<p style="font-size:14.5px;line-height:1.55;">'+escapeHtml(it.description || "Pas de description.")+'</p>'+
+      '<button class="btn danger block" style="margin-top:24px;" id="deleteItemBtn">Supprimer ce vêtement</button>';
+    document.getElementById("deleteItemBtn").addEventListener("click", function(){
+      if(confirm("Supprimer définitivement ce vêtement ?")){
+        state.items = state.items.filter(function(i){return i.id!==id;});
+        save();
+        document.getElementById("itemOverlay").classList.remove("show");
+        renderWardrobe();
+        showToast("Vêtement supprimé");
+      }
+    });
+    document.getElementById("itemOverlay").classList.add("show");
+  }
+  document.getElementById("closeItemOverlay").addEventListener("click", function(){
+    document.getElementById("itemOverlay").classList.remove("show");
+  });
+
+  /* ---------- Add item ---------- */
+  function renderAddCatPicker(){
+    var box = document.getElementById("addCatPicker");
+    box.innerHTML = CATEGORIES.map(function(c){
+      return '<div class="opt'+(addCategory===c.id?" active":"")+'" data-c="'+c.id+'">'+c.label+'</div>';
+    }).join("");
+    box.querySelectorAll(".opt").forEach(function(el){
+      el.addEventListener("click", function(){ addCategory = el.dataset.c; renderAddCatPicker(); });
+    });
+  }
+  renderAddCatPicker();
+
+  var pendingPhoto = null;
+  function handleFile(file){
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var img = new Image();
+      img.onload = function(){
+        var maxW = 900;
+        var scale = Math.min(1, maxW/img.width);
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width*scale;
+        canvas.height = img.height*scale;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        pendingPhoto = canvas.toDataURL("image/jpeg", 0.72);
+        var prev = document.getElementById("addPreview");
+        prev.src = pendingPhoto;
+        prev.style.display = "block";
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  document.getElementById("btnCamera").addEventListener("click", function(){
+    document.getElementById("fileCamera").click();
+  });
+  document.getElementById("btnGallery").addEventListener("click", function(){
+    document.getElementById("fileGallery").click();
+  });
+  document.getElementById("fileCamera").addEventListener("change", function(e){ handleFile(e.target.files[0]); });
+  document.getElementById("fileGallery").addEventListener("change", function(e){ handleFile(e.target.files[0]); });
+
+  document.getElementById("btnSaveItem").addEventListener("click", function(){
+    if(!pendingPhoto){ showToast("Ajoute d'abord une photo"); return; }
+    var name = document.getElementById("addName").value.trim();
+    var desc = document.getElementById("addDesc").value.trim();
+    state.items.push({
+      id: uid(),
+      category: addCategory,
+      name: name,
+      description: desc,
+      photo: pendingPhoto,
+      createdAt: Date.now()
+    });
+    save();
+    pendingPhoto = null;
+    document.getElementById("addPreview").style.display = "none";
+    document.getElementById("addPreview").src = "";
+    document.getElementById("addName").value = "";
+    document.getElementById("addDesc").value = "";
+    document.getElementById("fileCamera").value = "";
+    document.getElementById("fileGallery").value = "";
+    showToast("Vêtement enregistré");
+    setView("wardrobe");
+  });
+
+  /* ---------- Composer ---------- */
+  var SLOT_TO_CATS = {
+    haut:["haut"], bas:["bas"], chaussures:["chaussures"], veste:["veste"], accessoire:["accessoire"]
+  };
+  function renderComposer(){
+    composeSelection = composeSelection || {};
+    Object.keys(SLOT_TO_CATS).forEach(function(slot){
+      var el = document.getElementById("slot"+capitalize(slot));
+      var content = el.querySelector(".slot-content");
+      var sel = composeSelection[slot];
+      el.classList.toggle("filled", !!sel);
+      if(sel){
+        var it = state.items.filter(function(i){return i.id===sel;})[0];
+        if(it){
+          content.innerHTML = '<img src="'+it.photo+'" alt=""><div><div class="slot-label">'+catLabel(it.category)+'</div><div class="slot-name">'+escapeHtml(it.name||catLabel(it.category))+'</div></div>';
+        }
+      } else {
+        var placeholders = {
+          haut:"Choisir un haut", bas:"Choisir un bas", chaussures:"Choisir des chaussures",
+          veste:"Veste / manteau (optionnel)", accessoire:"Accessoire (optionnel)"
+        };
+        content.innerHTML = '<span class="placeholder">'+placeholders[slot]+'</span>';
+      }
+    });
+    renderCriteria();
+  }
+  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  document.querySelectorAll(".slot").forEach(function(slotEl){
+    slotEl.addEventListener("click", function(){
+      openPicker(slotEl.dataset.slot);
+    });
+  });
+
+  function openPicker(slot){
+    pickerTargetSlot = slot;
+    var cats = SLOT_TO_CATS[slot];
+    var candidates = state.items.filter(function(i){ return cats.indexOf(i.category) !== -1; });
+    document.getElementById("pickerTitle").textContent = "Choisir : " + catLabel(cats[0]);
+    var list = document.getElementById("pickerList");
+    if(candidates.length===0){
+      list.innerHTML = '<p style="font-size:13.5px;color:var(--ink-soft);padding:14px 4px;">Aucun vêtement dans cette catégorie. Ajoutes-en un depuis l\'onglet « Ajouter ».</p>';
+    } else {
+      list.innerHTML = candidates.map(function(it){
+        return '<div class="pick-item" data-id="'+it.id+'"><img src="'+it.photo+'" alt=""><div class="n">'+escapeHtml(it.name||catLabel(it.category))+'</div></div>';
+      }).join("");
+    }
+    list.querySelectorAll(".pick-item").forEach(function(el){
+      el.addEventListener("click", function(){
+        composeSelection[pickerTargetSlot] = el.dataset.id;
+        document.getElementById("pickerSheet").classList.remove("show");
+        renderComposer();
+      });
+    });
+    document.getElementById("pickerSheet").classList.add("show");
+  }
+  document.getElementById("pickerCancel").addEventListener("click", function(){
+    document.getElementById("pickerSheet").classList.remove("show");
+  });
+
+  function renderCriteria(){
+    var box = document.getElementById("criteriaBox");
+    box.innerHTML = CRITERIA.map(function(crit){
+      var val = lookRatings[crit] || 0;
+      var stars = "";
+      for(var i=1;i<=5;i++){
+        stars += '<span class="star'+(i<=val?" on":"")+'" data-crit="'+crit+'" data-val="'+i+'">★</span>';
+      }
+      return '<div class="crit-row"><span class="crit-name">'+crit+'</span><div class="stars">'+stars+'</div></div>';
+    }).join("");
+    box.querySelectorAll(".star").forEach(function(el){
+      el.addEventListener("click", function(){
+        var crit = el.dataset.crit, val = parseInt(el.dataset.val,10);
+        if(lookRatings[crit] === val){ lookRatings[crit] = 0; } else { lookRatings[crit] = val; }
+        renderCriteria();
+      });
+    });
+  }
+
+  document.getElementById("btnSaveLook").addEventListener("click", function(){
+    if(!composeSelection.haut || !composeSelection.bas || !composeSelection.chaussures){
+      showToast("Choisis au moins un haut, un bas et des chaussures");
+      return;
+    }
+    var name = document.getElementById("lookName").value.trim();
+    var note = document.getElementById("lookNote").value.trim();
+    state.looks.push({
+      id: uid(),
+      name: name,
+      items: Object.assign({}, composeSelection),
+      ratings: Object.assign({}, lookRatings),
+      note: note,
+      createdAt: Date.now()
+    });
+    save();
+    composeSelection = {};
+    lookRatings = {};
+    document.getElementById("lookName").value = "";
+    document.getElementById("lookNote").value = "";
+    renderComposer();
+    showToast("Look enregistré");
+    setView("looks");
+  });
+
+  /* ---------- Looks list ---------- */
+  function renderLooks(){
+    var list = document.getElementById("looksList");
+    document.getElementById("looksEmpty").style.display = state.looks.length===0 ? "block" : "none";
+    var sorted = state.looks.slice().sort(function(a,b){ return b.createdAt - a.createdAt; });
+    list.innerHTML = sorted.map(function(look){
+      var imgs = ["haut","bas","chaussures"].map(function(slot){
+        var it = state.items.filter(function(i){return i.id===look.items[slot];})[0];
+        return it ? '<img src="'+it.photo+'" alt="">' : '';
+      }).join("");
+      var avg = averageRating(look.ratings);
+      return '<div class="look-card" data-id="'+look.id+'">'+
+        '<div class="imgs">'+imgs+'</div>'+
+        '<div class="lname">'+escapeHtml(look.name || "Look sans nom")+'</div>'+
+        (look.note ? '<div class="lnote">'+escapeHtml(look.note)+'</div>' : '')+
+        (avg ? '<div class="mini-stars">'+"★".repeat(Math.round(avg))+" "+avg.toFixed(1)+'/5</div>' : '')+
+        '</div>';
+    }).join("");
+    list.querySelectorAll(".look-card").forEach(function(el){
+      el.addEventListener("click", function(){ openLookDetail(el.dataset.id); });
+    });
+  }
+  function averageRating(ratings){
+    var vals = Object.values(ratings || {}).filter(function(v){return v>0;});
+    if(vals.length===0) return 0;
+    return vals.reduce(function(a,b){return a+b;},0)/vals.length;
+  }
+
+  function openLookDetail(id){
+    var look = state.looks.filter(function(l){return l.id===id;})[0];
+    if(!look) return;
+    var body = document.getElementById("lookOverlayBody");
+    var slotsOrder = ["haut","bas","chaussures","veste","accessoire"];
+    var trio = slotsOrder.map(function(slot){
+      var it = state.items.filter(function(i){return i.id===look.items[slot];})[0];
+      return it ? '<img src="'+it.photo+'" alt="" title="'+catLabel(it.category)+'">' : '';
+    }).join("");
+    var ratingsHtml = CRITERIA.map(function(c){
+      var v = (look.ratings && look.ratings[c]) || 0;
+      return '<div class="crit-row"><span class="crit-name">'+c+'</span><span style="color:var(--star-on);">'+("★".repeat(v))+("☆".repeat(5-v))+'</span></div>';
+    }).join("");
+    body.innerHTML =
+      '<h2 style="margin-bottom:14px;">'+escapeHtml(look.name || "Look sans nom")+'</h2>'+
+      '<div class="trio">'+trio+'</div>'+
+      '<div class="criteria">'+ratingsHtml+'</div>'+
+      (look.note ? '<p style="font-size:14.5px;line-height:1.55;margin-top:14px;">'+escapeHtml(look.note)+'</p>' : '')+
+      '<button class="btn danger block" style="margin-top:26px;" id="deleteLookBtn">Supprimer ce look</button>';
+    document.getElementById("deleteLookBtn").addEventListener("click", function(){
+      if(confirm("Supprimer définitivement ce look ?")){
+        state.looks = state.looks.filter(function(l){return l.id!==id;});
+        save();
+        document.getElementById("lookOverlay").classList.remove("show");
+        renderLooks();
+        showToast("Look supprimé");
+      }
+    });
+    document.getElementById("lookOverlay").classList.add("show");
+  }
+  document.getElementById("closeLookOverlay").addEventListener("click", function(){
+    document.getElementById("lookOverlay").classList.remove("show");
+  });
+
+  /* ---------- Settings: export / import / reset ---------- */
+  document.getElementById("btnExport").addEventListener("click", function(){
+    try{
+      var blob = new Blob([JSON.stringify(state)], {type:"application/json"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      var d = new Date();
+      a.href = url;
+      a.download = "atelier-sauvegarde-"+d.toISOString().slice(0,10)+".json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Export lancé");
+    }catch(e){
+      console.error(e);
+      showToast("Échec de l'export");
+    }
+  });
+  document.getElementById("btnImport").addEventListener("click", function(){
+    document.getElementById("fileImport").click();
+  });
+  document.getElementById("fileImport").addEventListener("change", function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        var data = JSON.parse(ev.target.result);
+        if(!data.items || !data.looks) throw new Error("format invalide");
+        if(confirm("Remplacer toutes les données actuelles par cette sauvegarde ?")){
+          state = data;
+          save();
+          renderWardrobe();
+          showToast("Sauvegarde importée");
+        }
+      }catch(err){
+        showToast("Fichier de sauvegarde invalide");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+  document.getElementById("btnReset").addEventListener("click", function(){
+    if(confirm("Effacer définitivement tous les vêtements et looks ?")){
+      if(confirm("Vraiment sûr ? Cette action est irréversible.")){
+        state = {items:[], looks:[]};
+        save();
+        renderWardrobe();
+        showToast("Données effacées");
+      }
+    }
+  });
+
+  /* ---------- Diagnostic ---------- */
+  function runDiagnostic(){
+    var box = document.getElementById("diagBox");
+    if(!box) return;
+    var lines = [];
+
+    // 1. localStorage available at all?
+    var lsOk = false, lsErr = "";
+    try{
+      var testKey = "atelier_diag_test";
+      var testVal = "test-" + Date.now();
+      localStorage.setItem(testKey, testVal);
+      var readBack = localStorage.getItem(testKey);
+      lsOk = (readBack === testVal);
+      if(!lsOk) lsErr = "écrit mais relu différent";
+    }catch(e){
+      lsErr = e.message || String(e);
+    }
+    lines.push((lsOk ? "✅" : "❌") + " Écriture/lecture immédiate : " + (lsOk ? "OK" : "ÉCHEC ("+lsErr+")"));
+
+    // 2. What's actually persisted right now, read fresh from localStorage
+    var persistedCount = {items:0, looks:0};
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        persistedCount.items = (parsed.items||[]).length;
+        persistedCount.looks = (parsed.looks||[]).length;
+      }
+    }catch(e){}
+    lines.push("📦 Actuellement enregistré : " + persistedCount.items + " vêtement(s), " + persistedCount.looks + " look(s)");
+
+    // 3. Origin / URL context
+    lines.push("🔗 Adresse : " + location.href.replace(/^https?:\/\//,""));
+
+    // 4. Persistent visit counter — proves whether storage survives a full close+reopen
+    var visitKey = "atelier_visit_count";
+    var visits = 0;
+    try{
+      visits = parseInt(localStorage.getItem(visitKey) || "0", 10) + 1;
+      localStorage.setItem(visitKey, String(visits));
+    }catch(e){}
+    lines.push("🔁 Nombre d'ouvertures de la page depuis l'installation : " + visits + (visits<=1 ? " (si ce nombre revient à 1 après avoir fermé et rouvert l'app, le stockage est effacé entre les sessions)" : ""));
+
+    box.innerHTML = lines.map(function(l){ return '<div>'+l+'</div>'; }).join("");
+  }
+
+  /* ---------- Init ---------- */
+  load();
+  renderWardrobe();
+  runDiagnostic();
+})();
+</script>
+</body>
+</html>
