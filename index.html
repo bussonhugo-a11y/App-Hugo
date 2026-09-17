@@ -14,67 +14,57 @@
     --ink:#232220;
     --ink-soft:#6B6459;
     --line:#DBD5C9;
-    --accent:#3B4A6B;
-    --accent-soft:#DCE1EA;
+    --accent:#2F5FE0;
+    --accent-soft:#DEE6FB;
     --sage:#7C8A72;
-    --danger:#A8503F;
-    --star-on:#B98B3E;
+    --danger:#C1274F;
+    --star-on:#E8A23D;
     --star-off:#D9D2C3;
-    --radius-s:3px;
-    --radius-m:10px;
-    --shadow: 0 1px 2px rgba(35,34,32,0.06), 0 4px 14px rgba(35,34,32,0.05);
+    --virt-on:#2F5FE0;
+    --c-haut:#2F5FE0;
+    --c-haut-soft:#DEE6FB;
+    --c-bas:#E0982E;
+    --c-bas-soft:#F7E7CE;
+    --c-chaussures:#C1274F;
+    --c-chaussures-soft:#F6DCE3;
+    --radius-s:5px;
+    --radius-m:14px;
+    --shadow: 0 1px 2px rgba(35,34,32,0.06), 0 6px 18px rgba(35,34,32,0.07);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#1B1A18;
-      --bg-elevated:#242220;
-      --ink:#EEE9DF;
-      --ink-soft:#A79E8F;
-      --line:#3A362F;
-      --accent:#8FA3CE;
-      --accent-soft:#2A3244;
-      --sage:#9BAE8F;
-      --danger:#D98A76;
-      --star-on:#D9A94F;
-      --star-off:#4A4539;
-      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+      --bg:#171614; --bg-elevated:#221F1B; --ink:#F1ECE1; --ink-soft:#ABA091; --line:#39352E;
+      --accent:#6C94F5; --accent-soft:#233052; --sage:#9BAE8F; --danger:#E06485;
+      --star-on:#F0B44E; --virt-on:#6C94F5; --star-off:#4A4539;
+      --c-haut:#6C94F5; --c-haut-soft:#233052;
+      --c-bas:#F0B44E; --c-bas-soft:#3A2E17;
+      --c-chaussures:#E06485; --c-chaussures-soft:#3A1E27;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 6px 18px rgba(0,0,0,0.3);
     }
   }
   :root[data-theme="dark"]{
-    --bg:#1B1A18;
-    --bg-elevated:#242220;
-    --ink:#EEE9DF;
-    --ink-soft:#A79E8F;
-    --line:#3A362F;
-    --accent:#8FA3CE;
-    --accent-soft:#2A3244;
-    --sage:#9BAE8F;
-    --danger:#D98A76;
-    --star-on:#D9A94F;
-    --star-off:#4A4539;
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+    --bg:#171614; --bg-elevated:#221F1B; --ink:#F1ECE1; --ink-soft:#ABA091; --line:#39352E;
+    --accent:#6C94F5; --accent-soft:#233052; --sage:#9BAE8F; --danger:#E06485;
+    --star-on:#F0B44E; --virt-on:#6C94F5; --star-off:#4A4539;
+    --c-haut:#6C94F5; --c-haut-soft:#233052;
+    --c-bas:#F0B44E; --c-bas-soft:#3A2E17;
+    --c-chaussures:#E06485; --c-chaussures-soft:#3A1E27;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 6px 18px rgba(0,0,0,0.3);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Work Sans', -apple-system, sans-serif;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-    padding-bottom:calc(76px + env(safe-area-inset-bottom));
+    background:var(--bg); color:var(--ink); font-family:'Work Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased; min-height:100vh; padding-bottom:calc(76px + env(safe-area-inset-bottom));
   }
   h1,h2,h3{font-family:'Fraunces', Georgia, serif; font-weight:500; margin:0;}
   ::selection{background:var(--accent-soft);}
 
   header.top{
-    padding:calc(18px + env(safe-area-inset-top)) 20px 14px;
-    display:flex; align-items:baseline; justify-content:space-between;
-    border-bottom:1px solid var(--line);
-    background:var(--bg);
-    position:sticky; top:0; z-index:5;
+    padding:calc(18px + env(safe-area-inset-top)) 20px 14px; display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1px solid var(--line); background:var(--bg); position:sticky; top:0; z-index:5;
   }
-  header.top .mark{font-family:'Fraunces',serif; font-size:22px; font-style:italic; letter-spacing:0.2px;}
+  header.top .mark{font-family:'Fraunces',serif; font-size:22px; font-style:italic;}
   header.top .sub{font-size:12px; color:var(--ink-soft);}
 
   main{padding:18px 16px 8px; max-width:640px; margin:0 auto;}
@@ -82,36 +72,35 @@
   .view.active{display:block; animation:fadein .18s ease;}
   @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
 
-  /* Wardrobe grid */
   .filters{display:flex; gap:8px; overflow-x:auto; padding-bottom:14px; -ms-overflow-style:none; scrollbar-width:none;}
   .filters::-webkit-scrollbar{display:none;}
   .chip{
-    flex:0 0 auto; padding:7px 14px; border-radius:999px; border:1px solid var(--line);
-    font-size:13px; color:var(--ink-soft); background:var(--bg-elevated); cursor:pointer; white-space:nowrap;
+    flex:0 0 auto; padding:7px 15px; border-radius:999px; border:1px solid var(--line);
+    font-size:13px; font-weight:500; color:var(--ink-soft); background:var(--bg-elevated); cursor:pointer; white-space:nowrap;
+    transition:background .15s, color .15s, border-color .15s;
   }
   .chip.active{background:var(--ink); color:var(--bg); border-color:var(--ink);}
+  .chip.cat-haut.active{background:var(--c-haut); border-color:var(--c-haut); color:#fff;}
+  .chip.cat-bas.active{background:var(--c-bas); border-color:var(--c-bas); color:#2A1D06;}
+  .chip.cat-chaussures.active{background:var(--c-chaussures); border-color:var(--c-chaussures); color:#fff;}
 
-  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px;}
+  /* Wardrobe grid — 3 par ligne */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
   .card{
-    background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m);
-    overflow:hidden; box-shadow:var(--shadow); cursor:pointer;
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:8px; overflow:hidden; box-shadow:var(--shadow); cursor:pointer;
   }
   .card .thumb{width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--accent-soft); display:block;}
-  .card .meta{padding:9px 10px 11px;}
-  .card .meta .name{font-size:13.5px; font-weight:500; line-height:1.25;}
-  .card .meta .cat{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+  .card .meta{padding:6px 7px 8px;}
+  .card .meta .name{font-size:11.5px; font-weight:500; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .card .meta .cat{font-size:10px; color:var(--ink-soft); margin-top:1px;}
 
-  .empty{
-    text-align:center; padding:50px 20px; color:var(--ink-soft);
-  }
+  .empty{text-align:center; padding:50px 20px; color:var(--ink-soft);}
   .empty h3{color:var(--ink); font-size:19px; margin-bottom:8px;}
   .empty p{font-size:13.5px; line-height:1.5; max-width:280px; margin:0 auto;}
 
-  /* Buttons */
   .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:6px;
-    padding:12px 18px; border-radius:var(--radius-s); border:1px solid var(--ink);
-    background:var(--ink); color:var(--bg); font-family:'Work Sans',sans-serif; font-size:14.5px; font-weight:500;
+    display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:12px 18px; border-radius:var(--radius-s);
+    border:1px solid var(--ink); background:var(--ink); color:var(--bg); font-family:'Work Sans',sans-serif; font-size:14.5px; font-weight:500;
     cursor:pointer; -webkit-tap-highlight-color:transparent;
   }
   .btn.secondary{background:transparent; color:var(--ink); border-color:var(--line);}
@@ -119,7 +108,6 @@
   .btn.block{width:100%;}
   .btn:active{opacity:0.75;}
 
-  /* Forms */
   label.field{display:block; margin-bottom:16px;}
   label.field .lbl{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:6px;}
   input[type=text], textarea, select{
@@ -128,9 +116,7 @@
   }
   textarea{min-height:70px; resize:vertical;}
   .cat-picker{display:flex; gap:8px; flex-wrap:wrap;}
-  .cat-picker .opt{
-    padding:8px 13px; border-radius:999px; border:1px solid var(--line); font-size:13px; cursor:pointer; background:var(--bg-elevated);
-  }
+  .cat-picker .opt{padding:8px 13px; border-radius:999px; border:1px solid var(--line); font-size:13px; cursor:pointer; background:var(--bg-elevated);}
   .cat-picker .opt.active{background:var(--accent); color:#fff; border-color:var(--accent);}
 
   .photo-row{display:flex; gap:10px; margin-bottom:16px;}
@@ -140,52 +126,64 @@
     margin-bottom:16px; background:var(--accent-soft); display:none;
   }
 
-  /* Composer */
-  .slot{
-    border:1px dashed var(--line); border-radius:var(--radius-m); padding:12px; margin-bottom:12px;
-    display:flex; align-items:center; gap:12px; min-height:64px; cursor:pointer; background:var(--bg-elevated);
+  /* Composer — cartes swipables */
+  .swipe-row{margin-bottom:16px;}
+  .swipe-label{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; padding:0 2px;}
+  .swipe-label .lname{font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;}
+  .swipe-label .lcount{font-size:11.5px; color:var(--ink-soft);}
+  .swipe-viewport{position:relative; height:190px; touch-action:pan-y;}
+  .swipe-card{
+    position:absolute; inset:0; border-radius:16px; overflow:hidden; background:var(--bg-elevated);
+    box-shadow:var(--shadow); border:2px solid var(--line); cursor:grab; will-change:transform;
+    display:flex; align-items:flex-end;
   }
-  .slot.filled{border-style:solid;}
-  .slot img{width:52px; height:52px; object-fit:cover; border-radius:var(--radius-s); flex:0 0 auto;}
-  .slot .slot-label{font-size:12px; color:var(--ink-soft); text-transform:none;}
-  .slot .slot-name{font-size:14.5px; font-weight:500;}
-  .slot .placeholder{color:var(--ink-soft); font-size:13.5px;}
+  .swipe-card img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .swipe-card .grad{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.62), rgba(0,0,0,0) 55%);}
+  .swipe-card .cap{position:relative; padding:12px 14px; color:#fff; z-index:1;}
+  .swipe-card .cap .cn{font-family:'Fraunces',serif; font-size:16.5px; line-height:1.2;}
+  .swipe-card .cap .cc{font-size:11px; opacity:0.85; margin-top:1px;}
+  .swipe-card.dragging{transition:none;}
+  .swipe-empty{
+    height:190px; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;
+    border:1.5px dashed var(--line); border-radius:16px; color:var(--ink-soft); font-size:13px;
+  }
+  .swipe-dots{display:flex; justify-content:center; gap:5px; margin-top:9px;}
+  .swipe-dots .dot{width:6px; height:6px; border-radius:50%; background:var(--line);}
+  .swipe-dots .dot.active{background:var(--dot-color, var(--ink)); width:16px; border-radius:4px; transition:width .15s;}
+  .swipe-hint{text-align:center; font-size:11.5px; color:var(--ink-soft); margin:-4px 0 18px;}
 
-  .picker-sheet{
-    position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:30; display:none; align-items:flex-end;
-  }
-  .picker-sheet.show{display:flex;}
-  .picker-panel{
-    background:var(--bg); width:100%; max-height:75vh; border-radius:16px 16px 0 0; padding:16px 16px calc(16px + env(safe-area-inset-bottom));
-    overflow-y:auto;
-  }
-  .picker-panel h3{margin-bottom:12px;}
-  .pick-item{display:flex; align-items:center; gap:12px; padding:10px 4px; border-bottom:1px solid var(--line); cursor:pointer;}
-  .pick-item img{width:44px; height:44px; object-fit:cover; border-radius:var(--radius-s);}
-  .pick-item .n{font-size:14px;}
-
-  .criteria{margin:18px 0;}
-  .crit-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
-  .crit-row .crit-name{font-size:14px;}
-  .stars{display:flex; gap:3px;}
-  .star{font-size:22px; color:var(--star-off); cursor:pointer; line-height:1;}
+  .rating-block{background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m); padding:16px; margin-top:6px;}
+  .rating-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .rating-row:last-child{margin-bottom:0;}
+  .rating-row .rlabel{font-size:13.5px;}
+  .rating-row .rlabel .sub{display:block; font-size:11px; color:var(--ink-soft); font-weight:400;}
+  .stars{display:flex; gap:4px;}
+  .star{font-size:25px; color:var(--star-off); cursor:pointer; line-height:1;}
   .star.on{color:var(--star-on);}
+  .star.virtual.on{color:var(--virt-on);}
 
   /* Looks list */
   .look-card{
     background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m);
-    padding:12px; margin-bottom:12px; box-shadow:var(--shadow); cursor:pointer;
+    padding:12px; margin-bottom:12px; box-shadow:var(--shadow); cursor:pointer; display:flex; gap:12px; align-items:center;
   }
-  .look-card .imgs{display:flex; gap:6px; margin-bottom:10px;}
-  .look-card .imgs img{width:56px; height:56px; object-fit:cover; border-radius:var(--radius-s); border:1px solid var(--line);}
-  .look-card .lname{font-size:15.5px; font-weight:500; font-family:'Fraunces',serif;}
-  .look-card .lnote{font-size:12.5px; color:var(--ink-soft); margin-top:3px;}
-  .mini-stars{font-size:12px; color:var(--star-on); margin-top:6px;}
+  .look-card .imgs{display:flex; gap:5px; flex:0 0 auto;}
+  .look-card .imgs img{width:48px; height:48px; object-fit:cover; border-radius:6px; border:1px solid var(--line);}
+  .look-card .info{flex:1; min-width:0;}
+  .look-card .lscores{font-size:12px; display:flex; gap:12px; margin-top:4px;}
+  .look-card .lscores span{color:var(--ink-soft);}
+  .look-card .lscores b{color:var(--ink); font-weight:600;}
 
-  /* Detail overlay */
-  .overlay{
-    position:fixed; inset:0; background:var(--bg); z-index:20; display:none; overflow-y:auto;
-  }
+  .hidden-note{font-size:12.5px; color:var(--ink-soft); text-align:center; padding:14px; }
+  .hidden-note button{background:none; border:none; color:var(--accent); text-decoration:underline; font-size:12.5px; padding:0;}
+
+  /* Item detail best looks */
+  .best-look-row{display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); cursor:pointer;}
+  .best-look-row .imgs{display:flex; gap:5px;}
+  .best-look-row .imgs img{width:42px; height:42px; object-fit:cover; border-radius:6px; border:1px solid var(--line);}
+  .best-look-row .sc{font-size:12px; color:var(--ink-soft); margin-left:auto; text-align:right;}
+
+  .overlay{position:fixed; inset:0; background:var(--bg); z-index:20; display:none; overflow-y:auto;}
   .overlay.show{display:block;}
   .overlay-top{
     padding:calc(14px + env(safe-area-inset-top)) 16px 12px; display:flex; align-items:center; justify-content:space-between;
@@ -193,16 +191,13 @@
   }
   .overlay-top .close{font-size:15px; color:var(--ink-soft); cursor:pointer;}
   .overlay-body{padding:18px 16px 40px; max-width:640px; margin:0 auto;}
-  .overlay-body img.big{width:100%; max-height:50vh; object-fit:contain; border-radius:var(--radius-m); background:var(--accent-soft); margin-bottom:14px;}
+  .overlay-body img.big{width:100%; max-height:46vh; object-fit:contain; border-radius:var(--radius-m); background:var(--accent-soft); margin-bottom:14px;}
   .overlay-body .trio{display:flex; gap:8px; margin-bottom:16px;}
   .overlay-body .trio img{width:31%; aspect-ratio:1/1; object-fit:cover; border-radius:var(--radius-s); border:1px solid var(--line);}
 
-  /* Tab bar */
   nav.tabbar{
-    position:fixed; bottom:0; left:0; right:0; z-index:15;
-    background:var(--bg-elevated); border-top:1px solid var(--line);
-    padding:8px 6px calc(8px + env(safe-area-inset-bottom));
-    display:flex; justify-content:space-around;
+    position:fixed; bottom:0; left:0; right:0; z-index:15; background:var(--bg-elevated); border-top:1px solid var(--line);
+    padding:8px 6px calc(8px + env(safe-area-inset-bottom)); display:flex; justify-content:space-around;
   }
   nav.tabbar button{
     background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
@@ -226,10 +221,7 @@
 <body>
 
 <header class="top">
-  <div>
-    <div class="mark">Atelier</div>
-    <div class="sub" id="headerSub">ta garde-robe</div>
-  </div>
+  <div><div class="mark">Atelier</div><div class="sub" id="headerSub">ta garde-robe</div></div>
 </header>
 
 <main>
@@ -247,7 +239,6 @@
   <!-- AJOUTER -->
   <section class="view" id="view-add">
     <h2 style="margin-bottom:18px;">Ajouter un vêtement</h2>
-
     <img id="addPreview" class="preview-photo" alt="">
     <div class="photo-row">
       <button class="btn secondary" id="btnCamera">📷 Prendre une photo</button>
@@ -255,100 +246,76 @@
     </div>
     <input type="file" accept="image/*" capture="environment" id="fileCamera" style="display:none;">
     <input type="file" accept="image/*" id="fileGallery" style="display:none;">
-
-    <label class="field">
-      <span class="lbl">Catégorie</span>
-      <div class="cat-picker" id="addCatPicker"></div>
-    </label>
-
-    <label class="field">
-      <span class="lbl">Nom (optionnel)</span>
-      <input type="text" id="addName" placeholder="Ex. Pull col rond bleu marine">
-    </label>
-
-    <label class="field">
-      <span class="lbl">Description — couleur, matière, marque, saison...</span>
-      <textarea id="addDesc" placeholder="Ex. Laine mérinos, bleu marine, Uniqlo, mi-saison"></textarea>
-    </label>
-
+    <label class="field"><span class="lbl">Catégorie</span><div class="cat-picker" id="addCatPicker"></div></label>
+    <label class="field"><span class="lbl">Nom (optionnel)</span><input type="text" id="addName" placeholder="Ex. Pull col rond bleu marine"></label>
+    <label class="field"><span class="lbl">Description — couleur, matière, marque, saison...</span><textarea id="addDesc" placeholder="Ex. Laine mérinos, bleu marine, Uniqlo, mi-saison"></textarea></label>
     <button class="btn block" id="btnSaveItem">Enregistrer le vêtement</button>
   </section>
 
   <!-- COMPOSER -->
   <section class="view" id="view-compose">
-    <h2 style="margin-bottom:18px;">Composer un look</h2>
+    <h2 style="margin-bottom:4px;">Composer un look</h2>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:16px;">Fais défiler chaque rangée. La note s'enregistre toute seule.</p>
 
-    <div class="slot" data-slot="haut" id="slotHaut">
-      <div class="slot-content"><span class="placeholder">Choisir un haut</span></div>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:18px;">Fais glisser chaque carte à gauche ou à droite. La note s'enregistre toute seule.</p>
+
+    <div class="swipe-row" data-cat="haut" style="--dot-color:var(--c-haut);">
+      <div class="swipe-label"><span class="lname" style="color:var(--c-haut);">Haut</span><span class="lcount" id="countHaut"></span></div>
+      <div class="swipe-viewport" id="viewportHaut"></div>
+      <div class="swipe-dots" id="dotsHaut"></div>
     </div>
-    <div class="slot" data-slot="bas" id="slotBas">
-      <div class="slot-content"><span class="placeholder">Choisir un bas</span></div>
+    <div class="swipe-row" data-cat="bas" style="--dot-color:var(--c-bas);">
+      <div class="swipe-label"><span class="lname" style="color:var(--c-bas);">Bas</span><span class="lcount" id="countBas"></span></div>
+      <div class="swipe-viewport" id="viewportBas"></div>
+      <div class="swipe-dots" id="dotsBas"></div>
     </div>
-    <div class="slot" data-slot="chaussures" id="slotChaussures">
-      <div class="slot-content"><span class="placeholder">Choisir des chaussures</span></div>
-    </div>
-    <div class="slot" data-slot="veste" id="slotVeste">
-      <div class="slot-content"><span class="placeholder">Veste / manteau (optionnel)</span></div>
-    </div>
-    <div class="slot" data-slot="accessoire" id="slotAccessoire">
-      <div class="slot-content"><span class="placeholder">Accessoire (optionnel)</span></div>
+    <div class="swipe-row" data-cat="chaussures" style="--dot-color:var(--c-chaussures);">
+      <div class="swipe-label"><span class="lname" style="color:var(--c-chaussures);">Chaussures</span><span class="lcount" id="countChaussures"></span></div>
+      <div class="swipe-viewport" id="viewportChaussures"></div>
+      <div class="swipe-dots" id="dotsChaussures"></div>
     </div>
 
-    <label class="field" style="margin-top:18px;">
-      <span class="lbl">Nom du look</span>
-      <input type="text" id="lookName" placeholder="Ex. Bureau du lundi">
-    </label>
-
-    <div class="criteria" id="criteriaBox"></div>
-
-    <label class="field">
-      <span class="lbl">Notes</span>
-      <textarea id="lookNote" placeholder="Ex. Parfait pour un entretien, un peu chaud en été..."></textarea>
-    </label>
-
-    <button class="btn block" id="btnSaveLook">Enregistrer le look</button>
+    <div class="rating-block" id="ratingBlock">
+      <div class="rating-row">
+        <div class="rlabel">Évaluation réelle<span class="sub">tu l'as porté</span></div>
+        <div class="stars" id="starsReal"></div>
+      </div>
+      <div class="rating-row">
+        <div class="rlabel">Évaluation virtuelle<span class="sub">à l'œil, pas testé</span></div>
+        <div class="stars" id="starsVirtual"></div>
+      </div>
+    </div>
   </section>
 
   <!-- MES LOOKS -->
   <section class="view" id="view-looks">
-    <h2 style="margin-bottom:18px;">Mes looks</h2>
+    <h2 style="margin-bottom:14px;">Mes looks</h2>
+    <div class="filters" id="lookFilters"></div>
     <div id="looksList"></div>
+    <div class="hidden-note" id="hiddenNote" style="display:none;"></div>
     <div class="empty" id="looksEmpty" style="display:none;">
-      <h3>Aucun look enregistré</h3>
-      <p>Compose ton premier look depuis l'onglet « Looks ».</p>
+      <h3>Aucun look noté</h3>
+      <p>Compose un look dans l'onglet « Composer » et mets une note pour qu'il apparaisse ici.</p>
     </div>
   </section>
 
   <!-- REGLAGES -->
   <section class="view" id="view-settings">
     <h2 style="margin-bottom:8px;">Réglages</h2>
-    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:6px;">Tout est stocké uniquement sur cet iPhone, dans Safari. Pense à exporter régulièrement pour ne rien perdre.</p>
-
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:6px;">Pense à exporter régulièrement pour ne rien perdre.</p>
     <div class="settings-row">
-      <div>
-        <div class="s-label">Exporter mes données</div>
-        <div class="s-sub">Télécharge un fichier de sauvegarde .json</div>
-      </div>
+      <div><div class="s-label">Exporter mes données</div><div class="s-sub">Télécharge un fichier de sauvegarde .json</div></div>
       <button class="btn secondary" id="btnExport">Exporter</button>
     </div>
     <div class="settings-row">
-      <div>
-        <div class="s-label">Importer une sauvegarde</div>
-        <div class="s-sub">Remplace les données actuelles</div>
-      </div>
+      <div><div class="s-label">Importer une sauvegarde</div><div class="s-sub">Remplace les données actuelles</div></div>
       <button class="btn secondary" id="btnImport">Importer</button>
     </div>
     <input type="file" accept="application/json" id="fileImport" style="display:none;">
     <div class="settings-row">
-      <div>
-        <div class="s-label">Tout effacer</div>
-        <div class="s-sub">Supprime vêtements et looks définitivement</div>
-      </div>
+      <div><div class="s-label">Tout effacer</div><div class="s-sub">Supprime vêtements et looks définitivement</div></div>
       <button class="btn danger" id="btnReset">Effacer</button>
     </div>
-
-    <h2 style="margin:28px 0 10px; font-size:17px;">Diagnostic de stockage</h2>
-    <div id="diagBox" style="font-size:13px; line-height:1.8; color:var(--ink-soft); background:var(--bg-elevated); border:1px solid var(--line); border-radius:var(--radius-m); padding:14px;"></div>
   </section>
 
 </main>
@@ -361,27 +328,13 @@
   <button class="tab" data-view="settings"><span class="icon">⚙️</span>Réglages</button>
 </nav>
 
-<div class="picker-sheet" id="pickerSheet">
-  <div class="picker-panel">
-    <h3 id="pickerTitle">Choisir</h3>
-    <div id="pickerList"></div>
-    <button class="btn secondary block" id="pickerCancel" style="margin-top:12px;">Annuler</button>
-  </div>
-</div>
-
 <div class="overlay" id="itemOverlay">
-  <div class="overlay-top">
-    <span></span>
-    <span class="close" id="closeItemOverlay">Fermer</span>
-  </div>
+  <div class="overlay-top"><span></span><span class="close" id="closeItemOverlay">Fermer</span></div>
   <div class="overlay-body" id="itemOverlayBody"></div>
 </div>
 
 <div class="overlay" id="lookOverlay">
-  <div class="overlay-top">
-    <span></span>
-    <span class="close" id="closeLookOverlay">Fermer</span>
-  </div>
+  <div class="overlay-top"><span></span><span class="close" id="closeLookOverlay">Fermer</span></div>
   <div class="overlay-body" id="lookOverlayBody"></div>
 </div>
 
@@ -392,82 +345,69 @@
   "use strict";
 
   var CATEGORIES = [
-    {id:"haut", label:"Haut"},
-    {id:"bas", label:"Bas"},
-    {id:"chaussures", label:"Chaussures"},
-    {id:"veste", label:"Veste / manteau"},
-    {id:"accessoire", label:"Accessoire"}
+    {id:"haut", label:"Haut"}, {id:"bas", label:"Bas"}, {id:"chaussures", label:"Chaussures"},
+    {id:"veste", label:"Veste / manteau"}, {id:"accessoire", label:"Accessoire"}
   ];
-  var CRITERIA = ["Confort","Style","Praticité","Occasion"];
-  var STORE_KEY = "atelier_wardrobe_v1";
+  var STORE_KEY = "atelier_wardrobe_v2";
+  var OLD_STORE_KEY = "atelier_wardrobe_v1";
 
   var state = { items: [], looks: [] };
   var currentFilter = "all";
   var addCategory = "haut";
-  var composeSelection = {};
-  var lookRatings = {};
-  var pickerTargetSlot = null;
+  var compose = { haut:null, bas:null, chaussures:null };
+  var lookStarFilter = {1:false,2:false,3:false,4:true,5:true};
+  var showAllLooks = false;
 
   function load(){
     try{
       var raw = localStorage.getItem(STORE_KEY);
       if(raw){ state = JSON.parse(raw); }
+      else{
+        var old = localStorage.getItem(OLD_STORE_KEY);
+        if(old){
+          var oldState = JSON.parse(old);
+          state.items = oldState.items || [];
+          state.looks = [];
+        }
+      }
       if(!state.items) state.items = [];
       if(!state.looks) state.looks = [];
     }catch(e){ console.error("Erreur de lecture du stockage", e); state = {items:[], looks:[]}; }
   }
   function save(){
-    try{
-      localStorage.setItem(STORE_KEY, JSON.stringify(state));
-    }catch(e){
-      console.error("Erreur d'écriture", e);
-      showToast("Stockage plein — exporte et allège ta garde-robe");
-    }
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    catch(e){ console.error("Erreur d'écriture", e); showToast("Stockage plein — exporte et allège ta garde-robe"); }
   }
   function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
-
   function showToast(msg){
-    var t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
+    var t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
     setTimeout(function(){ t.classList.remove("show"); }, 1800);
   }
-
-  function catLabel(id){
-    var c = CATEGORIES.filter(function(c){return c.id===id;})[0];
-    return c ? c.label : id;
-  }
+  function catLabel(id){ var c = CATEGORIES.filter(function(c){return c.id===id;})[0]; return c ? c.label : id; }
+  function escapeHtml(s){ return (s||"").replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function itemsByCat(cat){ return state.items.filter(function(i){ return i.category===cat; }); }
+  function findItem(id){ return state.items.filter(function(i){return i.id===id;})[0]; }
 
   /* ---------- Navigation ---------- */
   var views = ["wardrobe","add","compose","looks","settings"];
   function setView(v){
-    views.forEach(function(name){
-      document.getElementById("view-"+name).classList.toggle("active", name===v);
-    });
-    document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){
-      btn.classList.toggle("active", btn.dataset.view===v);
-    });
+    views.forEach(function(name){ document.getElementById("view-"+name).classList.toggle("active", name===v); });
+    document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){ btn.classList.toggle("active", btn.dataset.view===v); });
     var subMap = {wardrobe:"ta garde-robe", add:"nouveau vêtement", compose:"nouveau look", looks:"tes looks", settings:"réglages"};
     document.getElementById("headerSub").textContent = subMap[v] || "";
     if(v==="wardrobe") renderWardrobe();
     if(v==="looks") renderLooks();
     if(v==="compose") renderComposer();
   }
-  document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){
-    btn.addEventListener("click", function(){ setView(btn.dataset.view); });
-  });
+  document.querySelectorAll("nav.tabbar .tab").forEach(function(btn){ btn.addEventListener("click", function(){ setView(btn.dataset.view); }); });
 
   /* ---------- Wardrobe grid ---------- */
   function renderFilters(){
     var box = document.getElementById("filters");
     var html = '<div class="chip'+(currentFilter==="all"?" active":"")+'" data-f="all">Tout</div>';
-    CATEGORIES.forEach(function(c){
-      html += '<div class="chip'+(currentFilter===c.id?" active":"")+'" data-f="'+c.id+'">'+c.label+'</div>';
-    });
+    CATEGORIES.forEach(function(c){ html += '<div class="chip'+(currentFilter===c.id?" active":"")+'" data-f="'+c.id+'">'+c.label+'</div>'; });
     box.innerHTML = html;
-    box.querySelectorAll(".chip").forEach(function(el){
-      el.addEventListener("click", function(){ currentFilter = el.dataset.f; renderWardrobe(); });
-    });
+    box.querySelectorAll(".chip").forEach(function(el){ el.addEventListener("click", function(){ currentFilter = el.dataset.f; renderWardrobe(); }); });
   }
   function renderWardrobe(){
     renderFilters();
@@ -475,34 +415,58 @@
     var list = state.items.filter(function(it){ return currentFilter==="all" || it.category===currentFilter; });
     document.getElementById("wardrobeEmpty").style.display = state.items.length===0 ? "block" : "none";
     grid.innerHTML = list.map(function(it){
-      return '<div class="card" data-id="'+it.id+'">'+
-        '<img class="thumb" src="'+it.photo+'" alt="">'+
+      return '<div class="card" data-id="'+it.id+'"><img class="thumb" src="'+it.photo+'" alt="">'+
         '<div class="meta"><div class="name">'+escapeHtml(it.name || catLabel(it.category))+'</div>'+
         '<div class="cat">'+catLabel(it.category)+'</div></div></div>';
     }).join("");
-    grid.querySelectorAll(".card").forEach(function(card){
-      card.addEventListener("click", function(){ openItemDetail(card.dataset.id); });
-    });
+    grid.querySelectorAll(".card").forEach(function(card){ card.addEventListener("click", function(){ openItemDetail(card.dataset.id); }); });
   }
-  function escapeHtml(s){
-    return (s||"").replace(/[&<>"']/g, function(c){
-      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
-    });
+
+  function scoreOf(look){ return Math.max(look.real||0, look.virtual||0); }
+
+  function bestLooksForItem(itemId){
+    return state.looks.filter(function(l){
+      return l.haut===itemId || l.bas===itemId || l.chaussures===itemId;
+    }).sort(function(a,b){ return scoreOf(b)-scoreOf(a) || (b.updatedAt-a.updatedAt); });
+  }
+
+  function looksTrioHtml(look, size){
+    var slots = [look.haut, look.bas, look.chaussures];
+    return slots.map(function(id){
+      var it = findItem(id);
+      if(!it) return '';
+      var style = size ? ' style="width:'+size+'px;height:'+size+'px;"' : '';
+      return '<img src="'+it.photo+'"'+style+' alt="">';
+    }).join("");
   }
 
   function openItemDetail(id){
-    var it = state.items.filter(function(i){return i.id===id;})[0];
+    var it = findItem(id);
     if(!it) return;
     var body = document.getElementById("itemOverlayBody");
+    var best = bestLooksForItem(id).slice(0, 8);
+    var bestHtml = best.length ? best.map(function(l){
+      return '<div class="best-look-row" data-key="'+l.key+'"><div class="imgs">'+looksTrioHtml(l,42)+'</div>'+
+        '<div class="sc">'+(l.real?('★ '+l.real):'')+(l.real&&l.virtual?' · ':'')+(l.virtual?('👁 '+l.virtual):'')+'</div></div>';
+    }).join("") : '<p style="font-size:13px;color:var(--ink-soft);padding:8px 0;">Pas encore de look noté avec ce vêtement. Va dans Composer pour en créer un.</p>';
     body.innerHTML =
       '<img class="big" src="'+it.photo+'" alt="">'+
       '<h2 style="margin-bottom:4px;">'+escapeHtml(it.name || catLabel(it.category))+'</h2>'+
-      '<div style="color:var(--ink-soft);font-size:13px;margin-bottom:14px;">'+catLabel(it.category)+'</div>'+
-      '<p style="font-size:14.5px;line-height:1.55;">'+escapeHtml(it.description || "Pas de description.")+'</p>'+
-      '<button class="btn danger block" style="margin-top:24px;" id="deleteItemBtn">Supprimer ce vêtement</button>';
+      '<div style="color:var(--ink-soft);font-size:13px;margin-bottom:6px;">'+catLabel(it.category)+'</div>'+
+      '<p style="font-size:14.5px;line-height:1.55;margin-bottom:22px;">'+escapeHtml(it.description || "Pas de description.")+'</p>'+
+      '<h3 style="font-size:16px;margin-bottom:8px;">Meilleurs looks avec ce vêtement</h3>'+
+      bestHtml+
+      '<button class="btn danger block" style="margin-top:26px;" id="deleteItemBtn">Supprimer ce vêtement</button>';
+    body.querySelectorAll(".best-look-row").forEach(function(row){
+      row.addEventListener("click", function(){
+        document.getElementById("itemOverlay").classList.remove("show");
+        openLookDetail(row.dataset.key);
+      });
+    });
     document.getElementById("deleteItemBtn").addEventListener("click", function(){
-      if(confirm("Supprimer définitivement ce vêtement ?")){
+      if(confirm("Supprimer définitivement ce vêtement ? Les looks qui l'utilisent seront aussi supprimés.")){
         state.items = state.items.filter(function(i){return i.id!==id;});
+        state.looks = state.looks.filter(function(l){ return l.haut!==id && l.bas!==id && l.chaussures!==id; });
         save();
         document.getElementById("itemOverlay").classList.remove("show");
         renderWardrobe();
@@ -511,19 +475,13 @@
     });
     document.getElementById("itemOverlay").classList.add("show");
   }
-  document.getElementById("closeItemOverlay").addEventListener("click", function(){
-    document.getElementById("itemOverlay").classList.remove("show");
-  });
+  document.getElementById("closeItemOverlay").addEventListener("click", function(){ document.getElementById("itemOverlay").classList.remove("show"); });
 
   /* ---------- Add item ---------- */
   function renderAddCatPicker(){
     var box = document.getElementById("addCatPicker");
-    box.innerHTML = CATEGORIES.map(function(c){
-      return '<div class="opt'+(addCategory===c.id?" active":"")+'" data-c="'+c.id+'">'+c.label+'</div>';
-    }).join("");
-    box.querySelectorAll(".opt").forEach(function(el){
-      el.addEventListener("click", function(){ addCategory = el.dataset.c; renderAddCatPicker(); });
-    });
+    box.innerHTML = CATEGORIES.map(function(c){ return '<div class="opt'+(addCategory===c.id?" active":"")+'" data-c="'+c.id+'">'+c.label+'</div>'; }).join("");
+    box.querySelectorAll(".opt").forEach(function(el){ el.addEventListener("click", function(){ addCategory = el.dataset.c; renderAddCatPicker(); }); });
   }
   renderAddCatPicker();
 
@@ -534,28 +492,19 @@
     reader.onload = function(e){
       var img = new Image();
       img.onload = function(){
-        var maxW = 900;
-        var scale = Math.min(1, maxW/img.width);
+        var maxW = 900; var scale = Math.min(1, maxW/img.width);
         var canvas = document.createElement("canvas");
-        canvas.width = img.width*scale;
-        canvas.height = img.height*scale;
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        canvas.width = img.width*scale; canvas.height = img.height*scale;
+        var ctx = canvas.getContext("2d"); ctx.drawImage(img,0,0,canvas.width,canvas.height);
         pendingPhoto = canvas.toDataURL("image/jpeg", 0.72);
-        var prev = document.getElementById("addPreview");
-        prev.src = pendingPhoto;
-        prev.style.display = "block";
+        var prev = document.getElementById("addPreview"); prev.src = pendingPhoto; prev.style.display = "block";
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   }
-  document.getElementById("btnCamera").addEventListener("click", function(){
-    document.getElementById("fileCamera").click();
-  });
-  document.getElementById("btnGallery").addEventListener("click", function(){
-    document.getElementById("fileGallery").click();
-  });
+  document.getElementById("btnCamera").addEventListener("click", function(){ document.getElementById("fileCamera").click(); });
+  document.getElementById("btnGallery").addEventListener("click", function(){ document.getElementById("fileGallery").click(); });
   document.getElementById("fileCamera").addEventListener("change", function(e){ handleFile(e.target.files[0]); });
   document.getElementById("fileGallery").addEventListener("change", function(e){ handleFile(e.target.files[0]); });
 
@@ -563,14 +512,7 @@
     if(!pendingPhoto){ showToast("Ajoute d'abord une photo"); return; }
     var name = document.getElementById("addName").value.trim();
     var desc = document.getElementById("addDesc").value.trim();
-    state.items.push({
-      id: uid(),
-      category: addCategory,
-      name: name,
-      description: desc,
-      photo: pendingPhoto,
-      createdAt: Date.now()
-    });
+    state.items.push({ id: uid(), category: addCategory, name: name, description: desc, photo: pendingPhoto, createdAt: Date.now() });
     save();
     pendingPhoto = null;
     document.getElementById("addPreview").style.display = "none";
@@ -583,277 +525,303 @@
     setView("wardrobe");
   });
 
-  /* ---------- Composer ---------- */
-  var SLOT_TO_CATS = {
-    haut:["haut"], bas:["bas"], chaussures:["chaussures"], veste:["veste"], accessoire:["accessoire"]
-  };
+  /* ---------- Composer (swipe cards) ---------- */
+  var CAT_ACCENT = { haut:"var(--c-haut)", bas:"var(--c-bas)", chaussures:"var(--c-chaussures)" };
+  var swipeIndex = { haut:0, bas:0, chaussures:0 };
+
+  function comboKey(){ return (compose.haut||"x")+"|"+(compose.bas||"x")+"|"+(compose.chaussures||"x"); }
+  function findLookByCombo(){
+    if(!compose.haut || !compose.bas || !compose.chaussures) return null;
+    var key = comboKey();
+    return state.looks.filter(function(l){ return l.key===key; })[0] || null;
+  }
+
   function renderComposer(){
-    composeSelection = composeSelection || {};
-    Object.keys(SLOT_TO_CATS).forEach(function(slot){
-      var el = document.getElementById("slot"+capitalize(slot));
-      var content = el.querySelector(".slot-content");
-      var sel = composeSelection[slot];
-      el.classList.toggle("filled", !!sel);
-      if(sel){
-        var it = state.items.filter(function(i){return i.id===sel;})[0];
-        if(it){
-          content.innerHTML = '<img src="'+it.photo+'" alt=""><div><div class="slot-label">'+catLabel(it.category)+'</div><div class="slot-name">'+escapeHtml(it.name||catLabel(it.category))+'</div></div>';
-        }
-      } else {
-        var placeholders = {
-          haut:"Choisir un haut", bas:"Choisir un bas", chaussures:"Choisir des chaussures",
-          veste:"Veste / manteau (optionnel)", accessoire:"Accessoire (optionnel)"
-        };
-        content.innerHTML = '<span class="placeholder">'+placeholders[slot]+'</span>';
-      }
-    });
-    renderCriteria();
-  }
-  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-
-  document.querySelectorAll(".slot").forEach(function(slotEl){
-    slotEl.addEventListener("click", function(){
-      openPicker(slotEl.dataset.slot);
-    });
-  });
-
-  function openPicker(slot){
-    pickerTargetSlot = slot;
-    var cats = SLOT_TO_CATS[slot];
-    var candidates = state.items.filter(function(i){ return cats.indexOf(i.category) !== -1; });
-    document.getElementById("pickerTitle").textContent = "Choisir : " + catLabel(cats[0]);
-    var list = document.getElementById("pickerList");
-    if(candidates.length===0){
-      list.innerHTML = '<p style="font-size:13.5px;color:var(--ink-soft);padding:14px 4px;">Aucun vêtement dans cette catégorie. Ajoutes-en un depuis l\'onglet « Ajouter ».</p>';
-    } else {
-      list.innerHTML = candidates.map(function(it){
-        return '<div class="pick-item" data-id="'+it.id+'"><img src="'+it.photo+'" alt=""><div class="n">'+escapeHtml(it.name||catLabel(it.category))+'</div></div>';
-      }).join("");
-    }
-    list.querySelectorAll(".pick-item").forEach(function(el){
-      el.addEventListener("click", function(){
-        composeSelection[pickerTargetSlot] = el.dataset.id;
-        document.getElementById("pickerSheet").classList.remove("show");
-        renderComposer();
-      });
-    });
-    document.getElementById("pickerSheet").classList.add("show");
-  }
-  document.getElementById("pickerCancel").addEventListener("click", function(){
-    document.getElementById("pickerSheet").classList.remove("show");
-  });
-
-  function renderCriteria(){
-    var box = document.getElementById("criteriaBox");
-    box.innerHTML = CRITERIA.map(function(crit){
-      var val = lookRatings[crit] || 0;
-      var stars = "";
-      for(var i=1;i<=5;i++){
-        stars += '<span class="star'+(i<=val?" on":"")+'" data-crit="'+crit+'" data-val="'+i+'">★</span>';
-      }
-      return '<div class="crit-row"><span class="crit-name">'+crit+'</span><div class="stars">'+stars+'</div></div>';
-    }).join("");
-    box.querySelectorAll(".star").forEach(function(el){
-      el.addEventListener("click", function(){
-        var crit = el.dataset.crit, val = parseInt(el.dataset.val,10);
-        if(lookRatings[crit] === val){ lookRatings[crit] = 0; } else { lookRatings[crit] = val; }
-        renderCriteria();
-      });
-    });
+    ["haut","bas","chaussures"].forEach(function(cat){ renderSwipeRow(cat); });
+    renderRatingStars();
   }
 
-  document.getElementById("btnSaveLook").addEventListener("click", function(){
-    if(!composeSelection.haut || !composeSelection.bas || !composeSelection.chaussures){
-      showToast("Choisis au moins un haut, un bas et des chaussures");
+  function renderSwipeRow(cat){
+    var items = itemsByCat(cat);
+    var vp = document.getElementById("viewport"+capitalize(cat));
+    var dotsBox = document.getElementById("dots"+capitalize(cat));
+    var countEl = document.getElementById("count"+capitalize(cat));
+    countEl.textContent = items.length ? "" : "";
+    if(items.length===0){
+      vp.innerHTML = '<div class="swipe-empty">Aucun « '+catLabel(cat)+' » — ajoute-en un dans l\'onglet Ajouter.</div>';
+      dotsBox.innerHTML = "";
+      compose[cat] = null;
       return;
     }
-    var name = document.getElementById("lookName").value.trim();
-    var note = document.getElementById("lookNote").value.trim();
-    state.looks.push({
-      id: uid(),
-      name: name,
-      items: Object.assign({}, composeSelection),
-      ratings: Object.assign({}, lookRatings),
-      note: note,
-      createdAt: Date.now()
+    if(swipeIndex[cat] >= items.length) swipeIndex[cat] = 0;
+    compose[cat] = items[swipeIndex[cat]].id;
+    countEl.textContent = (swipeIndex[cat]+1) + " / " + items.length;
+    buildSwipeCard(cat, vp, items);
+    buildDots(cat, dotsBox, items);
+  }
+
+  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  function buildDots(cat, box, items){
+    if(items.length<2){ box.innerHTML=""; return; }
+    box.innerHTML = items.map(function(it,i){ return '<div class="dot'+(i===swipeIndex[cat]?" active":"")+'"></div>'; }).join("");
+  }
+
+  function cardInnerHtml(it, cat){
+    return '<img src="'+it.photo+'" alt=""><div class="grad"></div>'+
+      '<div class="cap"><div class="cn">'+escapeHtml(it.name||catLabel(cat))+'</div><div class="cc">'+catLabel(cat)+'</div></div>';
+  }
+
+  function buildSwipeCard(cat, vp, items){
+    vp.innerHTML = "";
+    var it = items[swipeIndex[cat]];
+    var card = document.createElement("div");
+    card.className = "swipe-card";
+    card.innerHTML = cardInnerHtml(it, cat);
+    vp.appendChild(card);
+    attachSwipe(card, cat, items, vp);
+  }
+
+  function attachSwipe(card, cat, items, vp){
+    var startX=0, startY=0, dx=0, dragging=false, decided=false, isHorizontal=false;
+    var W = vp.clientWidth || 300;
+
+    function onDown(e){
+      var p = e.touches ? e.touches[0] : e;
+      startX = p.clientX; startY = p.clientY; dx = 0; dragging = true; decided=false; isHorizontal=false;
+      card.classList.add("dragging");
+    }
+    function onMove(e){
+      if(!dragging) return;
+      var p = e.touches ? e.touches[0] : e;
+      var ddx = p.clientX - startX;
+      var ddy = p.clientY - startY;
+      if(!decided){
+        if(Math.abs(ddx) > 8 || Math.abs(ddy) > 8){ decided = true; isHorizontal = Math.abs(ddx) > Math.abs(ddy); }
+      }
+      if(!isHorizontal) return;
+      if(e.cancelable) e.preventDefault();
+      dx = ddx;
+      var rot = Math.max(-14, Math.min(14, dx/12));
+      card.style.transform = "translateX("+dx+"px) rotate("+rot+"deg)";
+      card.style.opacity = String(1 - Math.min(0.35, Math.abs(dx)/(W*1.4)));
+    }
+    function onUp(){
+      if(!dragging) return;
+      dragging = false;
+      card.classList.remove("dragging");
+      var threshold = Math.min(110, W*0.28);
+      if(isHorizontal && Math.abs(dx) > threshold){
+        var dir = dx > 0 ? 1 : -1;
+        card.style.transition = "transform .22s ease, opacity .22s ease";
+        card.style.transform = "translateX("+(dir*W*1.3)+"px) rotate("+(dir*16)+"deg)";
+        card.style.opacity = "0";
+        setTimeout(function(){
+          var len = items.length;
+          swipeIndex[cat] = ((swipeIndex[cat] - dir) % len + len) % len;
+          compose[cat] = items[swipeIndex[cat]].id;
+          var vpEl = document.getElementById("viewport"+capitalize(cat));
+          buildSwipeCard(cat, vpEl, items);
+          var newCard = vpEl.querySelector(".swipe-card");
+          newCard.style.transition = "none";
+          newCard.style.transform = "translateX("+(-dir*W*1.1)+"px) rotate("+(-dir*10)+"deg)";
+          newCard.style.opacity = "0";
+          requestAnimationFrame(function(){
+            newCard.style.transition = "transform .22s ease, opacity .22s ease";
+            newCard.style.transform = "translateX(0) rotate(0deg)";
+            newCard.style.opacity = "1";
+          });
+          buildDots(cat, document.getElementById("dots"+capitalize(cat)), items);
+          document.getElementById("count"+capitalize(cat)).textContent = (swipeIndex[cat]+1) + " / " + items.length;
+          renderRatingStars();
+        }, 220);
+      } else {
+        card.style.transition = "transform .18s ease, opacity .18s ease";
+        card.style.transform = "translateX(0) rotate(0deg)";
+        card.style.opacity = "1";
+      }
+    }
+    card.addEventListener("touchstart", onDown, {passive:true});
+    card.addEventListener("touchmove", onMove, {passive:false});
+    card.addEventListener("touchend", onUp);
+    card.addEventListener("touchcancel", onUp);
+    card.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }
+
+  function renderRatingStars(){
+    var look = findLookByCombo();
+    var real = look ? (look.real||0) : 0;
+    var virt = look ? (look.virtual||0) : 0;
+    document.getElementById("starsReal").innerHTML = starsHtml(real, false);
+    document.getElementById("starsVirtual").innerHTML = starsHtml(virt, true);
+    document.querySelectorAll("#starsReal .star").forEach(function(s){
+      s.addEventListener("click", function(){ setRating("real", parseInt(s.dataset.val,10)); });
     });
+    document.querySelectorAll("#starsVirtual .star").forEach(function(s){
+      s.addEventListener("click", function(){ setRating("virtual", parseInt(s.dataset.val,10)); });
+    });
+  }
+  function starsHtml(val, virtual){
+    var out = "";
+    for(var i=1;i<=5;i++){
+      out += '<span class="star'+(virtual?" virtual":"")+(i<=val?" on":"")+'" data-val="'+i+'">★</span>';
+    }
+    return out;
+  }
+
+  function setRating(kind, val){
+    if(!compose.haut || !compose.bas || !compose.chaussures){ showToast("Choisis un haut, un bas et des chaussures"); return; }
+    var key = comboKey();
+    var look = state.looks.filter(function(l){ return l.key===key; })[0];
+    if(!look){
+      look = { key:key, haut:compose.haut, bas:compose.bas, chaussures:compose.chaussures, real:0, virtual:0, createdAt:Date.now(), updatedAt:Date.now() };
+      state.looks.push(look);
+    }
+    var current = look[kind] || 0;
+    look[kind] = (current === val) ? 0 : val;
+    look.updatedAt = Date.now();
+    if(!look.real && !look.virtual){
+      state.looks = state.looks.filter(function(l){ return l.key!==key; });
+    }
     save();
-    composeSelection = {};
-    lookRatings = {};
-    document.getElementById("lookName").value = "";
-    document.getElementById("lookNote").value = "";
-    renderComposer();
-    showToast("Look enregistré");
-    setView("looks");
-  });
+    renderRatingStars();
+    showToast(kind==="real" ? "Évaluation réelle enregistrée" : "Évaluation virtuelle enregistrée");
+  }
 
   /* ---------- Looks list ---------- */
-  function renderLooks(){
-    var list = document.getElementById("looksList");
-    document.getElementById("looksEmpty").style.display = state.looks.length===0 ? "block" : "none";
-    var sorted = state.looks.slice().sort(function(a,b){ return b.createdAt - a.createdAt; });
-    list.innerHTML = sorted.map(function(look){
-      var imgs = ["haut","bas","chaussures"].map(function(slot){
-        var it = state.items.filter(function(i){return i.id===look.items[slot];})[0];
-        return it ? '<img src="'+it.photo+'" alt="">' : '';
-      }).join("");
-      var avg = averageRating(look.ratings);
-      return '<div class="look-card" data-id="'+look.id+'">'+
-        '<div class="imgs">'+imgs+'</div>'+
-        '<div class="lname">'+escapeHtml(look.name || "Look sans nom")+'</div>'+
-        (look.note ? '<div class="lnote">'+escapeHtml(look.note)+'</div>' : '')+
-        (avg ? '<div class="mini-stars">'+"★".repeat(Math.round(avg))+" "+avg.toFixed(1)+'/5</div>' : '')+
-        '</div>';
+  function renderLookFilters(){
+    var box = document.getElementById("lookFilters");
+    var stars = [5,4,3,2,1];
+    box.innerHTML = stars.map(function(n){
+      return '<div class="chip'+(lookStarFilter[n]?" active":"")+'" data-s="'+n+'">'+"★".repeat(n)+'</div>';
     }).join("");
-    list.querySelectorAll(".look-card").forEach(function(el){
-      el.addEventListener("click", function(){ openLookDetail(el.dataset.id); });
+    box.querySelectorAll(".chip").forEach(function(el){
+      el.addEventListener("click", function(){
+        var n = parseInt(el.dataset.s,10);
+        lookStarFilter[n] = !lookStarFilter[n];
+        renderLooks();
+      });
     });
   }
-  function averageRating(ratings){
-    var vals = Object.values(ratings || {}).filter(function(v){return v>0;});
-    if(vals.length===0) return 0;
-    return vals.reduce(function(a,b){return a+b;},0)/vals.length;
+  function renderLooks(){
+    renderLookFilters();
+    var list = document.getElementById("looksList");
+    var hiddenNote = document.getElementById("hiddenNote");
+    document.getElementById("looksEmpty").style.display = state.looks.length===0 ? "block" : "none";
+    var all = state.looks.slice().sort(function(a,b){ return scoreOf(b)-scoreOf(a) || (b.updatedAt-a.updatedAt); });
+    var visible = all.filter(function(l){ return lookStarFilter[scoreOf(l)]; });
+    var hiddenCount = all.length - visible.length;
+    list.innerHTML = visible.map(function(l){
+      return '<div class="look-card" data-key="'+l.key+'"><div class="imgs">'+looksTrioHtml(l,48)+'</div>'+
+        '<div class="info"><div class="lscores">'+
+        (l.real ? '<span>Réelle <b>'+"★".repeat(l.real)+'</b></span>' : '<span>Réelle —</span>')+
+        (l.virtual ? '<span>Virtuelle <b>'+"★".repeat(l.virtual)+'</b></span>' : '<span>Virtuelle —</span>')+
+        '</div></div></div>';
+    }).join("");
+    list.querySelectorAll(".look-card").forEach(function(el){ el.addEventListener("click", function(){ openLookDetail(el.dataset.key); }); });
+    if(hiddenCount > 0){
+      hiddenNote.style.display = "block";
+      hiddenNote.innerHTML = hiddenCount + " look(s) masqué(s) (1 à 3 étoiles). <button id=\"showAllBtn\">Tout afficher</button>";
+      document.getElementById("showAllBtn").addEventListener("click", function(){
+        lookStarFilter = {1:true,2:true,3:true,4:true,5:true};
+        renderLooks();
+      });
+    } else {
+      hiddenNote.style.display = "none";
+    }
   }
 
-  function openLookDetail(id){
-    var look = state.looks.filter(function(l){return l.id===id;})[0];
+  function openLookDetail(key){
+    var look = state.looks.filter(function(l){return l.key===key;})[0];
     if(!look) return;
     var body = document.getElementById("lookOverlayBody");
-    var slotsOrder = ["haut","bas","chaussures","veste","accessoire"];
-    var trio = slotsOrder.map(function(slot){
-      var it = state.items.filter(function(i){return i.id===look.items[slot];})[0];
-      return it ? '<img src="'+it.photo+'" alt="" title="'+catLabel(it.category)+'">' : '';
-    }).join("");
-    var ratingsHtml = CRITERIA.map(function(c){
-      var v = (look.ratings && look.ratings[c]) || 0;
-      return '<div class="crit-row"><span class="crit-name">'+c+'</span><span style="color:var(--star-on);">'+("★".repeat(v))+("☆".repeat(5-v))+'</span></div>';
-    }).join("");
     body.innerHTML =
-      '<h2 style="margin-bottom:14px;">'+escapeHtml(look.name || "Look sans nom")+'</h2>'+
-      '<div class="trio">'+trio+'</div>'+
-      '<div class="criteria">'+ratingsHtml+'</div>'+
-      (look.note ? '<p style="font-size:14.5px;line-height:1.55;margin-top:14px;">'+escapeHtml(look.note)+'</p>' : '')+
-      '<button class="btn danger block" style="margin-top:26px;" id="deleteLookBtn">Supprimer ce look</button>';
-    document.getElementById("deleteLookBtn").addEventListener("click", function(){
-      if(confirm("Supprimer définitivement ce look ?")){
-        state.looks = state.looks.filter(function(l){return l.id!==id;});
+      '<div class="trio">'+looksTrioHtml(look, null)+'</div>'+
+      '<div class="rating-block" style="margin-bottom:20px;">'+
+        '<div class="rating-row"><div class="rlabel">Évaluation réelle</div><div class="stars" id="detStarsReal"></div></div>'+
+        '<div class="rating-row"><div class="rlabel">Évaluation virtuelle</div><div class="stars" id="detStarsVirtual"></div></div>'+
+      '</div>'+
+      '<button class="btn danger block" id="deleteLookBtn">Réinitialiser les notes de ce look</button>';
+    function refreshDetailStars(){
+      document.getElementById("detStarsReal").innerHTML = starsHtml(look.real||0, false);
+      document.getElementById("detStarsVirtual").innerHTML = starsHtml(look.virtual||0, true);
+      body.querySelectorAll("#detStarsReal .star").forEach(function(s){
+        s.addEventListener("click", function(){ applyDetailRating("real", parseInt(s.dataset.val,10)); });
+      });
+      body.querySelectorAll("#detStarsVirtual .star").forEach(function(s){
+        s.addEventListener("click", function(){ applyDetailRating("virtual", parseInt(s.dataset.val,10)); });
+      });
+    }
+    function applyDetailRating(kind, val){
+      var current = look[kind] || 0;
+      look[kind] = (current === val) ? 0 : val;
+      look.updatedAt = Date.now();
+      if(!look.real && !look.virtual){
+        state.looks = state.looks.filter(function(l){ return l.key!==key; });
         save();
         document.getElementById("lookOverlay").classList.remove("show");
         renderLooks();
-        showToast("Look supprimé");
+        showToast("Look supprimé (plus de note)");
+        return;
+      }
+      save();
+      refreshDetailStars();
+      renderLooks();
+    }
+    refreshDetailStars();
+    document.getElementById("deleteLookBtn").addEventListener("click", function(){
+      if(confirm("Remettre les deux notes à zéro ? Le look disparaîtra de la liste.")){
+        state.looks = state.looks.filter(function(l){ return l.key!==key; });
+        save();
+        document.getElementById("lookOverlay").classList.remove("show");
+        renderLooks();
+        showToast("Look réinitialisé");
       }
     });
     document.getElementById("lookOverlay").classList.add("show");
   }
-  document.getElementById("closeLookOverlay").addEventListener("click", function(){
-    document.getElementById("lookOverlay").classList.remove("show");
-  });
+  document.getElementById("closeLookOverlay").addEventListener("click", function(){ document.getElementById("lookOverlay").classList.remove("show"); });
 
-  /* ---------- Settings: export / import / reset ---------- */
+  /* ---------- Settings ---------- */
   document.getElementById("btnExport").addEventListener("click", function(){
     try{
       var blob = new Blob([JSON.stringify(state)], {type:"application/json"});
       var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      var d = new Date();
-      a.href = url;
-      a.download = "atelier-sauvegarde-"+d.toISOString().slice(0,10)+".json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      var a = document.createElement("a"); var d = new Date();
+      a.href = url; a.download = "atelier-sauvegarde-"+d.toISOString().slice(0,10)+".json";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
       showToast("Export lancé");
-    }catch(e){
-      console.error(e);
-      showToast("Échec de l'export");
-    }
+    }catch(e){ console.error(e); showToast("Échec de l'export"); }
   });
-  document.getElementById("btnImport").addEventListener("click", function(){
-    document.getElementById("fileImport").click();
-  });
+  document.getElementById("btnImport").addEventListener("click", function(){ document.getElementById("fileImport").click(); });
   document.getElementById("fileImport").addEventListener("change", function(e){
-    var file = e.target.files[0];
-    if(!file) return;
+    var file = e.target.files[0]; if(!file) return;
     var reader = new FileReader();
     reader.onload = function(ev){
       try{
         var data = JSON.parse(ev.target.result);
-        if(!data.items || !data.looks) throw new Error("format invalide");
+        if(!data.items) throw new Error("format invalide");
+        if(!data.looks) data.looks = [];
         if(confirm("Remplacer toutes les données actuelles par cette sauvegarde ?")){
-          state = data;
-          save();
-          renderWardrobe();
-          showToast("Sauvegarde importée");
+          state = data; save(); renderWardrobe(); showToast("Sauvegarde importée");
         }
-      }catch(err){
-        showToast("Fichier de sauvegarde invalide");
-      }
+      }catch(err){ showToast("Fichier de sauvegarde invalide"); }
     };
-    reader.readAsText(file);
-    e.target.value = "";
+    reader.readAsText(file); e.target.value = "";
   });
   document.getElementById("btnReset").addEventListener("click", function(){
     if(confirm("Effacer définitivement tous les vêtements et looks ?")){
       if(confirm("Vraiment sûr ? Cette action est irréversible.")){
-        state = {items:[], looks:[]};
-        save();
-        renderWardrobe();
-        showToast("Données effacées");
+        state = {items:[], looks:[]}; save(); renderWardrobe(); showToast("Données effacées");
       }
     }
   });
 
-  /* ---------- Diagnostic ---------- */
-  function runDiagnostic(){
-    var box = document.getElementById("diagBox");
-    if(!box) return;
-    var lines = [];
-
-    // 1. localStorage available at all?
-    var lsOk = false, lsErr = "";
-    try{
-      var testKey = "atelier_diag_test";
-      var testVal = "test-" + Date.now();
-      localStorage.setItem(testKey, testVal);
-      var readBack = localStorage.getItem(testKey);
-      lsOk = (readBack === testVal);
-      if(!lsOk) lsErr = "écrit mais relu différent";
-    }catch(e){
-      lsErr = e.message || String(e);
-    }
-    lines.push((lsOk ? "✅" : "❌") + " Écriture/lecture immédiate : " + (lsOk ? "OK" : "ÉCHEC ("+lsErr+")"));
-
-    // 2. What's actually persisted right now, read fresh from localStorage
-    var persistedCount = {items:0, looks:0};
-    try{
-      var raw = localStorage.getItem(STORE_KEY);
-      if(raw){
-        var parsed = JSON.parse(raw);
-        persistedCount.items = (parsed.items||[]).length;
-        persistedCount.looks = (parsed.looks||[]).length;
-      }
-    }catch(e){}
-    lines.push("📦 Actuellement enregistré : " + persistedCount.items + " vêtement(s), " + persistedCount.looks + " look(s)");
-
-    // 3. Origin / URL context
-    lines.push("🔗 Adresse : " + location.href.replace(/^https?:\/\//,""));
-
-    // 4. Persistent visit counter — proves whether storage survives a full close+reopen
-    var visitKey = "atelier_visit_count";
-    var visits = 0;
-    try{
-      visits = parseInt(localStorage.getItem(visitKey) || "0", 10) + 1;
-      localStorage.setItem(visitKey, String(visits));
-    }catch(e){}
-    lines.push("🔁 Nombre d'ouvertures de la page depuis l'installation : " + visits + (visits<=1 ? " (si ce nombre revient à 1 après avoir fermé et rouvert l'app, le stockage est effacé entre les sessions)" : ""));
-
-    box.innerHTML = lines.map(function(l){ return '<div>'+l+'</div>'; }).join("");
-  }
-
   /* ---------- Init ---------- */
   load();
   renderWardrobe();
-  runDiagnostic();
 })();
 </script>
 </body>
